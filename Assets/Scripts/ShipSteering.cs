@@ -1,17 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipSteering : MonoBehaviour {
     
     // Скорость поворота корабля
-    public float turnRate = 6.0f;
+    public float turnRate = 90.0f;
     
     // Сила выравнивания корабля
     public float levelDamping = 1.0f;
     
-    void Update () {
-        
+    // Сила поворота корабля
+    float rotationDamping = 1.0f;
+
+    private void Start()
+    {
+        if (turnRate >= 90f)
+        {
+            rotationDamping = turnRate / 90f;
+        }
+    }
+
+    void Update () 
+    {
         // Создать новый поворот, умножив вектор направления джойстика
         // на turnRate, и ограничить величиной 90 % от половины круга.
         
@@ -24,21 +36,23 @@ public class ShipSteering : MonoBehaviour {
         rotation.y = steeringInput.x;
         rotation.x = -steeringInput.y;
         
+        var maxRotation = rotation.normalized * turnRate / rotationDamping;
+        
         // Умножить на turnRate, чтобы получить величину поворота.
-        rotation *= turnRate;
-        
-        // Преобразовать в радианы, умножив на 90 %
-        // половины круга
-        rotation.x = Mathf.Clamp(
-            rotation.x, -Mathf.PI * 0.9f, Mathf.PI * 0.9f);
-        rotation.y = Mathf.Clamp(
-            rotation.y, -Mathf.PI * 0.9f, Mathf.PI * 0.9f);
-        
+        rotation *= turnRate / rotationDamping;
+
+        if (rotation.magnitude > maxRotation.magnitude)
+        {
+            rotation = maxRotation;
+        }
+
         // И преобразовать радианы в кватернион поворота!
-        var newOrientation = Quaternion.Euler(rotation);
+        var newRotation = transform.rotation * Quaternion.Euler(rotation);
         
-        // Объединить поворот с текущей ориентацией
-        transform.rotation *= newOrientation;
+        // Поворачиваем корабль в нужную сторону
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation, newRotation,
+            rotationDamping * Time.deltaTime);
         
         // Далее попытаться минимизировать поворот!
         

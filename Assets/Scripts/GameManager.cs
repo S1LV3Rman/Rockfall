@@ -7,7 +7,7 @@ public class GameManager : Singleton<GameManager>
 
     // Шаблон корабля, позиция его создания
     // и текущий объект корабля
-    public GameObject shipPrefab;
+    public GameObject[] shipPrefabs;
     public Transform shipStartPosition;
     public GameObject currentShip { get; private set; }
 
@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject pausedUI;
     public GameObject gameOverUI;
     public GameObject mainMenuUI;
+    public GameObject ShipChooseMenuUI;
 
     // Предупреждающая рамка, которая появляется,
     // когда игрок пересекает границу
@@ -53,7 +54,7 @@ public class GameManager : Singleton<GameManager>
 
         // Создать список всех контейнеров.
         GameObject[] allUI
-            = {inGameUI, pausedUI, gameOverUI, mainMenuUI};
+            = { inGameUI, pausedUI, gameOverUI, mainMenuUI, ShipChooseMenuUI };
 
         // Скрыть их все.
         foreach (GameObject UIToHide in allUI)
@@ -67,20 +68,41 @@ public class GameManager : Singleton<GameManager>
 
     public void ShowMainMenu()
     {
-
         ShowUI(mainMenuUI);
 
         // Когда игра запускается, она находится не в состоянии проигрывания
         gameIsPlaying = false;
+        
+        // Возобновить ход времени
+        Time.timeScale = 1.0f;
+
+        // Если корабль уже есть, удалить его
+        if (currentShip != null)
+        {
+            Destroy(currentShip);
+        }
+
+        // То же для станции
+        if (currentSpaceStation != null)
+        {
+            Destroy(currentSpaceStation);
+        }
 
         // Запретить создавать астероиды
         asteroidSpawner.spawnAsteroids = false;
+
+        // и удалить все уже созданные астероиды
+        asteroidSpawner.DestroyAllAsteroids();
+    }
+
+    public void ShipChooseMenu()
+    {
+        ShowUI(ShipChooseMenuUI);
     }
 
     // Вызывается в ответ на касание кнопки New Game
-    public void StartGame()
+    public void StartGame(int shipType)
     {
-
         // Вывести интерфейс игры
         ShowUI(inGameUI);
 
@@ -101,7 +123,7 @@ public class GameManager : Singleton<GameManager>
 
         // Создать новый корабль и поместить
         // его в начальную позицию
-        currentShip = Instantiate(shipPrefab);
+        currentShip = Instantiate(shipPrefabs[shipType]);
         currentShip.transform.position
             = shipStartPosition.position;
         currentShip.transform.rotation

@@ -6,7 +6,7 @@ public class DamageTaking : MonoBehaviour
 {
 
     // Число очков прочности данного объекта
-    public int hitPoints = 10;
+    public float hitPoints = 10;
 
     // При разрушении создать этот объект
     // в текущей позиции
@@ -17,21 +17,21 @@ public class DamageTaking : MonoBehaviour
 
     // Вызывается другими объектами (например, астероидами и шарами плазмы)
     // для нанесения повреждений
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
 
         // Сообщить о попадании в текущий объект
-        Debug.Log(gameObject.name + " damaged!");
+        //Debug.Log(gameObject.name + " damaged!");
 
         // Вычесть amount из числа очков прочности
         hitPoints -= amount;
 
         // Очки исчерпаны?
-        if (hitPoints <= 0)
+        if (hitPoints <= 0f)
         {
 
             // Зафиксировать этот факт
-            Debug.Log(gameObject.name + " destroyed!");
+            //Debug.Log(gameObject.name + " destroyed!");
 
             // Удалить себя из игры
             Destroy(gameObject);

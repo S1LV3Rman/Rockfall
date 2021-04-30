@@ -35,7 +35,8 @@ public class ShipEngines : MonoBehaviour {
     public void OnDestroy()
     {
         // Ничего не делать, если вызывается не в режиме игры
-        if (Application.isPlaying == true)
+        if (Application.isPlaying && 
+            InputManager.instance != null)
         {
             InputManager.instance
                 .RemoveEngines(this);

@@ -30,7 +30,7 @@ public class Singleton<T> : MonoBehaviour
                 _instance = FindObjectOfType<T>();
                 // Записать сообщение об ошибке в случае неудачи.
                 if (_instance == null) {
-                    Debug.LogError("Can't find "
+                    Debug.Log("Can't find "
                                    + typeof(T) + "!");
                 }
             }

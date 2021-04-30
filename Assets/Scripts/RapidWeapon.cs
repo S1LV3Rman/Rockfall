@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipWeapons : MonoBehaviour
+public class RapidWeapon : BaseWeapon
 {
     // Задержка между выстрелами в секундах.
     public float fireDelay = 0.2f;
-
+    
     // Шаблон для создания снарядов
     public GameObject shotPrefab;
-
-    // Список пушек для стрельбы
-    public Transform[] firePoints;
 
     // Индекс в firePoints, указывающий на следующую пушку
     private int firePointIndex;
@@ -19,34 +16,15 @@ public class ShipWeapons : MonoBehaviour
     // Содержит true, если в данный момент ведется огонь.
     private bool isFiring = false;
 
-    public void Awake()
-    {
-        // Когда данный объект запускается, сообщить
-        // диспетчеру ввода, использовать его
-        // как текущий сценарий управления оружием
-        InputManager.instance.SetWeapons(this);
-    }
-
-    // Вызывается при удалении объекта
-    public void OnDestroy()
-    {
-        // Ничего не делать, если вызывается не в режиме игры
-        if (Application.isPlaying == true)
-        {
-            InputManager.instance
-                .RemoveWeapons(this);
-        }
-    }
-
-    // Вызывается, когда чтобы начать огонь
-    public void StartFiring()
+    // Вызывается, чтобы начать огонь
+    public override void StartFiring()
     {
         // Запустить сопрограмму ведения огня
         StartCoroutine(Firing());
     }
 
     // Вызывается, когда прекращается огонь
-    public void StopFiring()
+    public override void StopFiring()
     {
         // Присвоить false, чтобы завершить цикл в Firing
         isFiring = false;

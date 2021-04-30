@@ -11,21 +11,21 @@ public class InputManager : Singleton<InputManager>
     public VirtualJoystick steering;
 
     // Текущий сценарий ShipWeapons управления стрельбой.
-    private ShipWeapons currentWeapons;
+    private BaseWeapon currentWeapons;
 
     // Текущий сценарий ShipEngines управления двигателями.
     private ShipEngines currentEngines;
 
     // Вызывается сценарием ShipWeapons для обновления
     // переменной currentWeapons.
-    public void SetWeapons(ShipWeapons weapons)
+    public void SetWeapons(BaseWeapon weapons)
     {
         this.currentWeapons = weapons;
     }
 
     // Аналогично; вызывается для сброса
     // переменной currentWeapons.
-    public void RemoveWeapons(ShipWeapons weapons)
+    public void RemoveWeapons(BaseWeapon weapons)
     {
         // Если currentWeapons ссылается на данный объект 'weapons',
         // присвоить ей null.

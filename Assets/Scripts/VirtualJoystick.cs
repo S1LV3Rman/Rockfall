@@ -78,8 +78,8 @@ public class VirtualJoystick : MonoBehaviour,
         delta = thumb.localPosition;
         delta.x /= size.x / 2.0f;
         delta.y /= size.y / 2.0f;
-        delta.x = Mathf.Clamp(delta.x, -1.0f, 1.0f);
-        delta.y = Mathf.Clamp(delta.y, -1.0f, 1.0f);
+        //delta.x = Mathf.Clamp(delta.x, -1.0f, 1.0f);
+        //delta.y = Mathf.Clamp(delta.y, -1.0f, 1.0f);
     }
     
     // Вызывается по окончании перемещения
