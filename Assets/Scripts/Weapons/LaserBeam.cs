@@ -16,6 +16,7 @@ namespace Scripts
         private Vector3 _endPoint;
         public bool Hitting { get; private set; } = false;
         public GameObject HittedObject { get; private set; }
+        public float MaxLength => maxLength;
 
         void Start()
         {

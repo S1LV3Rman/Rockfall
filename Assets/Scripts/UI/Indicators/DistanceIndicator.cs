@@ -23,6 +23,9 @@ namespace Scripts
 
         private void Update()
         {
+            if (_distanceFrom == null || _distanceTo == null)
+                return;
+            
             UpdateDistance();
         }
 

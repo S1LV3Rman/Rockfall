@@ -12,11 +12,16 @@ namespace Scripts
         private bool _isFiring = false;
         private float _nextFireTime;
 
+        public override float ProjectileSpeed => shotPrefab.Speed;
+        public override float MaxFireDistance => shotPrefab.Speed * shotPrefab.Lifetime;
+
         public override void StartFiring() => _isFiring = true;
         public override void StopFiring() => _isFiring = false;
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+            
             if (!_isFiring)
                 return;
 
@@ -27,19 +32,14 @@ namespace Scripts
             _nextFireTime = Time.time + fireDelay;
         }
 
-        // Вызывается при каждом выстреле
         private void Fire()
         {
-            // Создать новый снаряд с ориентацией,
-            // соответствующей пушке
             var shot = Instantiate(shotPrefab,
                 transform.position,
                 transform.rotation);
 
             shot.Damage = damage;
 
-            // Если пушка имеет компонент источника звука,
-            // воспроизвести звуковой эффект
             if (fireSound != null) 
                 fireSound.Play();
         }

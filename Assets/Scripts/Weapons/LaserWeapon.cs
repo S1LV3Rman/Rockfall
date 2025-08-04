@@ -13,6 +13,9 @@ namespace Scripts
         private bool _isFiring = false;
         private LaserBeam _currentLaserBeam;
 
+        public override float MaxFireDistance => _beamPrefab.MaxLength;
+        public override float ProjectileSpeed => float.MaxValue;
+
         public override void StartFiring()
         {
             StartCoroutine(Firing());

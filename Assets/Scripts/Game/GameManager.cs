@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Scripts
@@ -28,7 +29,7 @@ namespace Scripts
 
         // Сценарий, управляющий главной камерой
         [Header("Other")]
-        [SerializeField] private SmoothFollow cameraFollow;
+        [SerializeField] public SmoothFollow cameraFollow;
 
         // Границы игры
         [SerializeField] private Boundary boundary;
@@ -94,7 +95,7 @@ namespace Scripts
                 Destroy(_currentSpaceStation);
 
             // Запретить создавать астероиды
-            asteroidSpawner.spawnAsteroids = false;
+            asteroidSpawner.StopLaunching();
 
             // и удалить все уже созданные астероиды
             asteroidSpawner.DestroyAllAsteroids();
@@ -120,6 +121,7 @@ namespace Scripts
                 shipStartPosition.rotation);
             
             _currentShip.EquipWeapons(weaponType);
+            _currentShip.GetAimTargets = GetAimTargetsForShip;
 
             // То же для станции
             _currentSpaceStation = Instantiate(spaceStationPrefab,
@@ -131,11 +133,14 @@ namespace Scripts
             cameraFollow.target = _currentShip.transform;
 
             // Начать создавать астероиды
-            asteroidSpawner.spawnAsteroids = true;
+            asteroidSpawner.StartLaunchingAt(_currentSpaceStation.transform);
+        }
 
-            // Сообщить системе создания астероидов
-            // позицию новой станции
-            asteroidSpawner.target = _currentSpaceStation.transform;
+        private List<Transform> GetAimTargetsForShip()
+        {
+            var targets = asteroidSpawner.ExistingAsteroids.Select(asteroid => asteroid.transform).ToList();
+            targets.Add(_currentSpaceStation.transform);
+            return targets;
         }
 
         // Вызывается объектами, завершающими игру
@@ -154,7 +159,7 @@ namespace Scripts
             warningUI.SetActive(false);
 
             // Прекратить создавать астероиды
-            asteroidSpawner.spawnAsteroids = false;
+            asteroidSpawner.StopLaunching();
 
             // и удалить все уже созданные астероиды
             asteroidSpawner.DestroyAllAsteroids();

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5234201454577659482}
   - component: {fileID: 5489882053877124934}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 4937982945149594022}
   - component: {fileID: 5776294661906767160}
   - component: {fileID: 1507971117164294919}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
-  lifetime: 5
+  lifetime: 2.5
   _damageOnCollide: {fileID: 4937982945149594022}
 --- !u!114 &4937982945149594022
 MonoBehaviour:
@@ -236,7 +236,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

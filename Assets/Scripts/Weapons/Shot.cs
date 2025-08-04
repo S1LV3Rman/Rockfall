@@ -14,14 +14,13 @@ namespace Scripts
             set => _damageOnCollide.Damage = value;
         }
 
+        public float Speed => speed;
+        public float Lifetime => lifetime;
+
         void Start()
         {
+            GetComponent<Rigidbody>().linearVelocity = transform.forward * speed;
             Destroy(gameObject, lifetime);
-        }
-
-        void Update()
-        {
-            transform.Translate(Vector3.forward * (speed * Time.deltaTime));
         }
     }
 }

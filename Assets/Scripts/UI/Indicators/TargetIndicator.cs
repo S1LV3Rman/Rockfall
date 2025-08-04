@@ -52,7 +52,7 @@ namespace Scripts
         }
 
         // Обновляет положение индикатора в каждом кадре
-        private void Update()
+        private void LateUpdate()
         {
             // Цель исчезла? Если да, значит, индикатор тоже надо убрать
             if (Target == null)

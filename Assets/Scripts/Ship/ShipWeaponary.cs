@@ -6,60 +6,81 @@ namespace Scripts
 {
     public class ShipWeaponry : MonoBehaviour
     {
-        [SerializeField] private Transform _aimPoint;
         [SerializeField] private List<Transform> _weaponSlots;
         [SerializeField] private LaserWeapon _laserWeaponPrefab;
         [SerializeField] private RapidWeapon _rapidWeaponPrefab;
+        [SerializeField] private float _aimAssistCone = 15f;
+        [SerializeField][Range(0f, 10f)] private float _aimAssistStrength = 0.5f;
+
+        private readonly List<BaseWeapon> _equippedWeapons = new();
+
+        public Func<List<Transform>> GetAimTargets { get; set; }
 
         public void EquipWeapons(WeaponType weaponType)
         {
+            var weaponPrefab = GetWeaponPrefab(weaponType);
+            if (weaponPrefab == null)
+                return;
+
             foreach (var weaponSlot in _weaponSlots)
-            {
-                switch (weaponType)
-                {
-                    case WeaponType.Undefined:
-                        break;
-                    case WeaponType.RapidFire:
-                        Instantiate(_rapidWeaponPrefab, weaponSlot);
-                        break;
-                    case WeaponType.LaserBeam:
-                        Instantiate(_laserWeaponPrefab, weaponSlot);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null);
-                }
-            }
+                _equippedWeapons.Add(Instantiate(weaponPrefab, weaponSlot));
         }
 
-        public Transform FindBestTargetInCone(
-            Vector3 aimOrigin,
-            Vector3 aimDirection,
-            IEnumerable<Transform> asteroids,
-            float coneAngleDegrees,
-            float maxDistance)
+        private BaseWeapon GetWeaponPrefab(WeaponType weaponType) => weaponType switch
         {
-            float cosThreshold = Mathf.Cos(coneAngleDegrees * Mathf.Deg2Rad);
-            Transform bestTarget = null;
-            float bestDot = -1f; // closer to 1 is better
+            WeaponType.Undefined => null,
+            WeaponType.RapidFire => _rapidWeaponPrefab,
+            WeaponType.LaserBeam => _laserWeaponPrefab,
+            _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null)
+        };
 
-            foreach (var asteroid in asteroids)
+        private void Update()
+        {
+            var frameAssistStrength = 1f - Mathf.Exp(-_aimAssistStrength * Time.deltaTime);
+
+            foreach (var equippedWeapon in _equippedWeapons)
             {
-                Vector3 toAsteroid = asteroid.position - aimOrigin;
-                float distance = toAsteroid.magnitude;
-                if (distance > maxDistance)
-                    continue;
+                var currentAim = equippedWeapon.transform.forward;
+                var currentPosition = equippedWeapon.transform.position;
 
-                Vector3 toAsteroidDir = toAsteroid / distance; // normalize
-                float dot = Vector3.Dot(aimDirection, toAsteroidDir);
+                var target = AimAssistUtility.FindBestTargetInCone(
+                    currentPosition,
+                    transform.forward,
+                    GetAimTargets.Invoke(),
+                    _aimAssistCone,
+                    equippedWeapon.MaxFireDistance);
 
-                if (dot > cosThreshold && dot > bestDot)
+                Vector3 targetAimPoint;
+                if (target != null)
                 {
-                    bestDot = dot;
-                    bestTarget = asteroid;
+                    var targetBody = target.GetComponent<Rigidbody>();
+                    if (targetBody != null)
+                    {
+                        AimAssistUtility.TryGetLeadPoint(
+                            equippedWeapon.transform.position,
+                            targetBody.position,
+                            targetBody.linearVelocity,
+                            equippedWeapon.ProjectileSpeed,
+                            out targetAimPoint);
+                    }
+                    else
+                    {
+                        targetAimPoint = target.position;
+                    }
                 }
-            }
+                else
+                {
+                    targetAimPoint = transform.forward * equippedWeapon.MaxFireDistance;
+                }
 
-            return bestTarget;
+                var desiredAimDirection = targetAimPoint - equippedWeapon.transform.position;
+                var desiredAim = desiredAimDirection.normalized;
+                var newAim = Vector3.Slerp(currentAim, desiredAim, frameAssistStrength);
+
+                equippedWeapon.transform.forward = newAim;
+                equippedWeapon.DistanceToAimTarget =
+                    Mathf.Lerp(equippedWeapon.DistanceToAimTarget, desiredAimDirection.magnitude, frameAssistStrength);
+            }
         }
     }
 }

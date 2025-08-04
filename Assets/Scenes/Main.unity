@@ -1418,13 +1418,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516a44995e649874da60c248c369e9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 250
-  asteroidPrefab: {fileID: 677604279729644835, guid: ba8cc099b3274124c891919ae1b26635,
+  _radius: 250
+  _height: 50
+  _spawnDelay: 5
+  _spawnDeviation: 1
+  _asteroidPrefab: {fileID: 677604279729644835, guid: ba8cc099b3274124c891919ae1b26635,
     type: 3}
-  spawnRate: 5
-  variance: 1
-  target: {fileID: 0}
-  spawnAsteroids: 0
 --- !u!4 &782259330
 Transform:
   m_ObjectHideFlags: 0
@@ -1435,7 +1434,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

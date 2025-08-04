@@ -4,25 +4,29 @@ namespace Scripts
 {
     public abstract class BaseWeapon : MonoBehaviour
     {
+        [SerializeField] private Transform _aimPoint;
+        public abstract float MaxFireDistance { get; }
+        public abstract float ProjectileSpeed { get; }
+        public float DistanceToAimTarget { get; set; }
+
         public void Awake()
         {
-            // Когда данный объект запускается, сообщить
-            // диспетчеру ввода, использовать его
-            // как текущий сценарий управления оружием
             InputManager.Instance.AddWeapon(this);
         }
 
-        // Вызывается при удалении объекта
+        protected virtual void Update()
+        {
+            _aimPoint.localPosition = Vector3.forward * DistanceToAimTarget;
+        }
+
         public void OnDestroy()
         {
-            if (InputManager.Instance != null) 
+            if (InputManager.Instance != null)
                 InputManager.Instance.RemoveWeapon(this);
         }
 
-        // Вызывается, чтобы начать огонь
         public abstract void StartFiring();
 
-        // Вызывается, когда прекращается огонь
         public abstract void StopFiring();
     }
 }

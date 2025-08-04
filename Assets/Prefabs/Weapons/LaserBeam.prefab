@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3444549361996483155}
   - component: {fileID: 550431973576612599}
   - component: {fileID: 8200172106933026028}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LaserBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noise: 0.05
-  maxLength: 50
+  maxLength: 250
   endEffect: {fileID: 4055936472866772523}
   lineRenderer: {fileID: 8200172106933026028}
   layerMask:
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 7187304373792162439}
   - component: {fileID: 4055936472866772523}
   - component: {fileID: 2299809291867051015}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: End Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
