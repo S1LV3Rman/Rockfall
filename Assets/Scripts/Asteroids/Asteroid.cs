@@ -5,9 +5,10 @@ namespace Scripts
     public class Asteroid : MonoBehaviour
     {
         // Скорость перемещения астероида.
-        public float speed = 10.0f;
+        [SerializeField] private float speed = 10.0f;
         [SerializeField] private Color _indicatorColor;
         [SerializeField] private Color _indicatorHealthColor;
+        [SerializeField] private float _indicatorSize = 0.5f;
 
         public void SetTarget(Transform target)
         {
@@ -18,9 +19,10 @@ namespace Scripts
             GetComponent<Rigidbody>().linearVelocity = transform.forward * speed;
 
             // Создать красный индикатор для данного астероида
-            IndicatorManager.Instance.AddIndicator(transform, _indicatorColor)
+            IndicatorManager.Instance.AddIndicator(transform, _indicatorColor, _indicatorSize)
                 .WithHealth(_indicatorHealthColor)
-                .WithDistance(target);
+                .WithDistance(target)
+                .WithName(nameof(Asteroid));
         }
     }
 }

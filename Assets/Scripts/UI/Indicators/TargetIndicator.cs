@@ -23,8 +23,20 @@ namespace Scripts
         public Sprite Sprite
         {
             get => _image.sprite;
-            set => _image.sprite = value;
+            set
+            {
+                _image.sprite = value;
+                HasCustomSprite = true;
+            }
         }
+
+        public float Scale
+        {
+            get => _initialScale.x;
+            set => _initialScale = new Vector3(value, value, value);
+        }
+
+        public bool HasCustomSprite { get; private set; }
 
         public void FollowTarget(Transform target, Camera mainCamera)
         {

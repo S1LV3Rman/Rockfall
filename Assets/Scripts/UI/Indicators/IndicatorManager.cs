@@ -9,17 +9,22 @@ namespace Scripts
         [SerializeField] private TargetIndicator _indicatorPrefab;
         [SerializeField] private HealthIndicator _healthIndicatorPrefab;
         [SerializeField] private DistanceIndicator _distanceIndicatorPrefab;
+        [SerializeField] private NameIndicator _nameIndicatorPrefab;
 
-        public IndicatorBuilder AddIndicator(Transform target, Color color, Sprite sprite = null)
+        public IndicatorBuilder AddIndicator(Transform target, Color color, float size = 1f, Sprite sprite = null)
         {
             var newIndicator = Instantiate(_indicatorPrefab, _uiContainer, false);
             newIndicator.FollowTarget(target, _mainCamera);
             newIndicator.Color = color;
+            newIndicator.Scale *= size;
             if (sprite != null)
                 newIndicator.Sprite = sprite;
 
-            return new IndicatorBuilder(newIndicator, sprite != null,
-                _healthIndicatorPrefab, _distanceIndicatorPrefab);
+            return new IndicatorBuilder(
+                newIndicator,
+                _healthIndicatorPrefab,
+                _distanceIndicatorPrefab,
+                _nameIndicatorPrefab);
         }
     }
 }

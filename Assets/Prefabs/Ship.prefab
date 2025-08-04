@@ -370,7 +370,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a3e846593bafc45b516fdfb809f434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetImage: {fileID: 21300000, guid: c27ec2107ab194789a3d75683eba188c, type: 3}
+  _color: {r: 0, g: 0.84705883, b: 1, a: 1}
+  _targetImage: {fileID: 21300000, guid: c27ec2107ab194789a3d75683eba188c, type: 3}
+  _size: 0.75
 --- !u!1 &1922204256033907684
 GameObject:
   m_ObjectHideFlags: 0

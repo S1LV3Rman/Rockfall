@@ -3504,6 +3504,8 @@ MonoBehaviour:
     type: 3}
   _distanceIndicatorPrefab: {fileID: 4659926502554205423, guid: 24520c68ca23bb640ae0df1412c076d2,
     type: 3}
+  _nameIndicatorPrefab: {fileID: 4122556556032245274, guid: 6d4fbe0786b246e4da316fef712a2a64,
+    type: 3}
 --- !u!1 &2031695749
 GameObject:
   m_ObjectHideFlags: 0
