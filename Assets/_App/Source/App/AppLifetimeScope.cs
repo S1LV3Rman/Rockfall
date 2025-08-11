@@ -3,7 +3,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall
 {
-    public class AppLifetimeScope : LifetimeScope
+    public sealed class AppLifetimeScope : LifetimeScope
     {
         // [Header("Configs")]
 

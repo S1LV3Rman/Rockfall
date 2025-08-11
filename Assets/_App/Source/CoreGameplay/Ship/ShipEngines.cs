@@ -23,21 +23,6 @@ namespace S1LV3Rman.RockFall
 
         // Текущий режим работы двигателя
         private EngineMode currentMode = EngineMode.Hold;
-
-        public void Awake()
-        {
-            // Когда данный объект запускается, сообщить
-            // диспетчеру ввода, использовать его
-            // как текущий сценарий управления двигателем
-            InputManager.Instance.SetEngines(this);
-        }
-
-        // Вызывается при удалении объекта
-        public void OnDestroy()
-        {
-            if (InputManager.Instance != null) 
-                InputManager.Instance.RemoveEngines(this);
-        }
     
         // Перемещает корабль вперед с постоянной скоростью
         void Update () 

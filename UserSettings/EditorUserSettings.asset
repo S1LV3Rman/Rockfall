@@ -5,10 +5,19 @@ EditorUserSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 4
   m_ConfigSettings:
+    Eflatun_SceneReference_SceneGuidToAddressMapJson:
+      value: 184c
+      flags: 0
+    Eflatun_SceneReference_SceneGuidToPathMapJson:
+      value: 1813055051510d0f095e5e7548205a1512434928287b2032292b4932b1e53661e7e574b3a51b2c2f3c16fc733b1f112fbd390a0ef80e19443201ef0b36fe1d1601c919dc54dd1115df005e828f19d2bb838f82ef8db9e288888ba5aaa0a8b7abf4a6a3f8f8abaec6a8fdace4fa809d86e0d9a4c1d8d586f89bc2c19c8dd0d7dddcc5caf3d497ccc2ea8ea583a7deb2aa9ab5bdd4d9e7ccaa99c7c5b737b7ff6334336be9e4ece381eee06e82202982df7126852c72dccdd6cba27e8f9f8f968a51d59a944bd58f95688a54d060462e6d604361526b4c66635526585b4e79323c153421783d727b3c0f3c23475053317c405221741631425b29006d133a5343515565305d485e660535721e7340362c2a3d3f573b
+      flags: 0
     GraphicsSettingsInspector_UserSettings:
       value: 18134705175a055722080a3115371d4a0d55006876786860616b0471b8b07a68ffab74f9ee2a3a30300cea1a11320d0beb1a0c25f7060f494b4cdf1b18f3045e38cb5ad8
       flags: 0
     RecentlyUsedSceneGuid-0:
+      value: 07520c505c030c0e5f0b5c74442607444e4e4b2b7b2e25622e7b1b31b0b2616d
+      flags: 0
+    RecentlyUsedSceneGuid-1:
       value: 5207000201010d0b5f59542115265b4447151c792a2a223279284e36e0b9313a
       flags: 0
     vcSharedLogLevel:

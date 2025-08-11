@@ -5,30 +5,35 @@ using VContainer.Unity;
 
 namespace UneasyPixel.Game
 {
-    public class CoreGameplayLifetimeScope : LifetimeScope
+    public sealed class CoreGameplayLifetimeScope : LifetimeScope
     {
         [Header("Scene")]
         [SerializeField] private GameplayCamera _camera;
+        [SerializeField][Key("station")] private Transform _stationStartPoint;
+        [SerializeField][Key("ship")] private Transform _shipStartPoint;
 
         // [Header("UI")]
-        
-        // [Header("Configs")]
+
+        [Header("Configs")]
+        [SerializeField] private SpaceShipsConfig _spaceShipsConfig;
+        [SerializeField] private SpaceStationsConfig _spaceStationsConfig;
+        [SerializeField] private WeaponsConfig _weaponsConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance(_camera);
+
+            builder.RegisterInstance(_stationStartPoint);
+            builder.RegisterInstance(_shipStartPoint);
             
+            builder.RegisterInstance(_spaceShipsConfig);
+            builder.RegisterInstance(_spaceStationsConfig);
+            builder.RegisterInstance(_weaponsConfig);
+
             // builder.RegisterInstance(_gameMenu);
-            //
-            // builder.RegisterInstance(_charactersConfig);
-            // builder.RegisterInstance(_worldConfig);
-            // builder.RegisterInstance(_itemsConfig);
             //
             // builder.Register<CharactersFactory>(Lifetime.Singleton);
             // builder.Register<CharactersPool>(Lifetime.Singleton);
-            //
-            // builder.Register<SubscriptionsFactory>(Lifetime.Singleton);
-            // builder.RegisterEntryPoint<PlayerSubscriptionsRunner>().AsSelf();
             //
             // builder.RegisterEntryPoint<WorldCreator>();
             // builder.RegisterEntryPoint<CharactersRunner>();
