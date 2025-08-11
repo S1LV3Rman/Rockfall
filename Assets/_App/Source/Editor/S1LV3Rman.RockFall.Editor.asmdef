@@ -1,0 +1,16 @@
+{
+    "name": "S1LV3Rman.RockFall.Editor",
+    "rootNamespace": "S1LV3Rman.RockFall.Editor",
+    "references": [
+        "GUID:b11027441d25bdf45a9dff3b5839d8a2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
