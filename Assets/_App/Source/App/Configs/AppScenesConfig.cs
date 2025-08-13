@@ -7,5 +7,7 @@ namespace S1LV3Rman.RockFall
     public class AppScenesConfig : ScriptableObject
     {
         [field: SerializeField] public SceneReference EmptyScene { get; private set; }
+        [field: SerializeField] public SceneReference MainMenu { get; private set; }
+        [field: SerializeField] public SceneReference CoreGameplay { get; private set; }
     }
 }

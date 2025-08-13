@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_App/Scenes/CoreGameplay.unity
     guid: 164dd4d0278ceed41bd3fbdb4a3eb9eb
+  - enabled: 1
+    path: Assets/_App/Scenes/EmptyScene.unity
+    guid: dc8696e52e064e84893a7fc2c2fb2255
+  - enabled: 1
+    path: Assets/_App/Scenes/MainMenu.unity
+    guid: 01a42f9e5b457914c9d84c47536b4fb8
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 85a5d3da16e371f41a03300117cd8195,
       type: 3}

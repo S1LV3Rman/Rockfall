@@ -12,3 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7fc715a11704f82bbacd03dc859db77, type: 3}
   m_Name: AppScenesConfig
   m_EditorClassIdentifier: 
+  <EmptyScene>k__BackingField:
+    asset: {fileID: 102900000, guid: dc8696e52e064e84893a7fc2c2fb2255, type: 3}
+    guid: dc8696e52e064e84893a7fc2c2fb2255
+  <MainMenu>k__BackingField:
+    asset: {fileID: 102900000, guid: 01a42f9e5b457914c9d84c47536b4fb8, type: 3}
+    guid: 01a42f9e5b457914c9d84c47536b4fb8
+  <CoreGameplay>k__BackingField:
+    asset: {fileID: 102900000, guid: 164dd4d0278ceed41bd3fbdb4a3eb9eb, type: 3}
+    guid: 164dd4d0278ceed41bd3fbdb4a3eb9eb

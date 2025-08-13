@@ -1,4 +1,5 @@
 using System;
+using R3;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,33 +9,33 @@ namespace S1LV3Rman.RockFall
     public class MainMenuUI : UIBehaviour
     {
         [Header("Title")]
-        [SerializeField] private GameObject _title;
+        [SerializeField] private GameObject _titleUI;
+
         [SerializeField] private Button _start;
 
         [Header("Weapon Selection")]
-        [SerializeField] private GameObject _weaponSelection;
+        [SerializeField] private GameObject _weaponSelectionUI;
+
         [SerializeField] private Button _laserWeapon;
         [SerializeField] private Button _rapidWeapon;
 
-        public event Action<WeaponType> OnWeaponSelected;
+        public Observable<WeaponType> WeaponSelection { get; private set; }
 
         protected override void Awake()
         {
             _start.onClick.AddListener(ChooseWeapon);
-            _laserWeapon.onClick.AddListener(StartWithLaser);
-            _rapidWeapon.onClick.AddListener(StartWithRapid);
-            
-            _title.SetActive(true);
-            _weaponSelection.SetActive(false);
-        }
+            WeaponSelection = Observable.Merge(
+                _laserWeapon.OnClickAsObservable().Select(_ => WeaponType.LaserBeam),
+                _rapidWeapon.OnClickAsObservable().Select(_ => WeaponType.RapidFire));
 
-        private void StartWithLaser() => OnWeaponSelected?.Invoke(WeaponType.LaserBeam);
-        private void StartWithRapid() => OnWeaponSelected?.Invoke(WeaponType.RapidFire);
+            _titleUI.SetActive(true);
+            _weaponSelectionUI.SetActive(false);
+        }
 
         private void ChooseWeapon()
         {
-            _title.SetActive(false);
-            _weaponSelection.SetActive(true);
+            _titleUI.SetActive(false);
+            _weaponSelectionUI.SetActive(true);
         }
     }
 }

@@ -1,16 +1,15 @@
-using S1LV3Rman.RockFall;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace UneasyPixel.Game
+namespace S1LV3Rman.RockFall
 {
-    public sealed class CoreGameplayLifetimeScope : LifetimeScope
+    public sealed class CoreGameplayLifetimeScope : AppStateLifetimeScope<CoreGameplayStateData>
     {
         [Header("Scene")]
         [SerializeField] private GameplayCamera _camera;
-        [SerializeField][Key("station")] private Transform _stationStartPoint;
-        [SerializeField][Key("ship")] private Transform _shipStartPoint;
+        [SerializeField] private Transform _stationStartPoint;
+        [SerializeField] private Transform _shipStartPoint;
 
         // [Header("UI")]
 
@@ -19,16 +18,18 @@ namespace UneasyPixel.Game
         [SerializeField] private SpaceStationsConfig _spaceStationsConfig;
         [SerializeField] private WeaponsConfig _weaponsConfig;
 
-        protected override void Configure(IContainerBuilder builder)
+        protected override void ConfigureState(IContainerBuilder builder)
         {
             builder.RegisterInstance(_camera);
 
-            builder.RegisterInstance(_stationStartPoint);
-            builder.RegisterInstance(_shipStartPoint);
+            builder.RegisterInstance(_stationStartPoint).Keyed("StationStart");
+            builder.RegisterInstance(_shipStartPoint).Keyed("ShipStart");
             
             builder.RegisterInstance(_spaceShipsConfig);
             builder.RegisterInstance(_spaceStationsConfig);
             builder.RegisterInstance(_weaponsConfig);
+
+            builder.RegisterEntryPoint<CoreGameplayRunner>();
 
             // builder.RegisterInstance(_gameMenu);
             //
