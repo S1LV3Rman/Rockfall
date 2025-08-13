@@ -1,6 +1,7 @@
 using Eflatun.SceneReference;
+using S1LV3Rman.RockFall.App;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class CoreGameplayState : SingleSceneAppState<CoreGameplayLifetimeScope, CoreGameplayStateData>
     {

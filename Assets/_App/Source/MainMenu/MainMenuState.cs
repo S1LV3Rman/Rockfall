@@ -1,6 +1,7 @@
 using Eflatun.SceneReference;
+using S1LV3Rman.RockFall.App;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.MainMenu
 {
     public class MainMenuState : SingleSceneAppState<MainMenuLifetimeScope, MainMenuStateData>
     {

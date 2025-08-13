@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class AsteroidSpawner : MonoBehaviour
     {

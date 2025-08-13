@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using S1LV3Rman.RockFall.App;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class DamageNumbersManager : Singleton<DamageNumbersManager>
     {

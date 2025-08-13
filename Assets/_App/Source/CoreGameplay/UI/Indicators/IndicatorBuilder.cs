@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class IndicatorBuilder
     {

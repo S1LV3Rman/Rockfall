@@ -1,7 +1,8 @@
 using Cysharp.Threading.Tasks;
+using S1LV3Rman.RockFall.MainMenu;
 using VContainer.Unity;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public class AppInitializer : IInitializable
     {
@@ -16,7 +17,7 @@ namespace S1LV3Rman.RockFall
 
         public void Initialize()
         {
-            var stateData = new MainMenuStateData();
+            var stateData = new MainMenuStateData(false);
             _appStateChanger.ChangeStateAsync<MainMenuState, MainMenuStateData>(stateData).Forget();
         }
     }

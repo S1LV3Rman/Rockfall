@@ -10,7 +10,7 @@
 // экземпляру класса так:
 // MyManager.instance.DoSomething();
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public class Singleton<T> : MonoBehaviour
         where T : MonoBehaviour {

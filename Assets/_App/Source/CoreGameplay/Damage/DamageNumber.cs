@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class DamageNumber : UIBehaviour
     {

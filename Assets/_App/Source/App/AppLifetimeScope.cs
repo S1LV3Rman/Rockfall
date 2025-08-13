@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using S1LV3Rman.RockFall.CoreGameplay;
+using S1LV3Rman.RockFall.MainMenu;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public sealed class AppLifetimeScope : LifetimeScope
     {

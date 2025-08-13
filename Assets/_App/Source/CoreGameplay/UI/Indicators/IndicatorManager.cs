@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using S1LV3Rman.RockFall.App;
+using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class IndicatorManager : Singleton<IndicatorManager>
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     [CreateAssetMenu(fileName = nameof(WeaponsConfig), menuName = "Config/" + nameof(WeaponsConfig), order = 0)]
     public class WeaponsConfig : ScriptableObject

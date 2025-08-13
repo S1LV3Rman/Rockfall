@@ -1,8 +1,9 @@
+using S1LV3Rman.RockFall.App;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public sealed class CoreGameplayLifetimeScope : AppStateLifetimeScope<CoreGameplayStateData>
     {
@@ -29,7 +30,9 @@ namespace S1LV3Rman.RockFall
             builder.RegisterInstance(_spaceStationsConfig);
             builder.RegisterInstance(_weaponsConfig);
 
-            builder.RegisterEntryPoint<CoreGameplayRunner>();
+            builder.Register<CurrentGameState>(Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<CoreGameplayLogic>();
 
             // builder.RegisterInstance(_gameMenu);
             //

@@ -1,7 +1,7 @@
 using VContainer;
 using VContainer.Unity;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public abstract class AppStateLifetimeScope<TStateData> : LifetimeScope where TStateData : IStateData
     {

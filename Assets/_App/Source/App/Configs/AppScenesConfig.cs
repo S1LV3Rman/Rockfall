@@ -1,7 +1,7 @@
 using Eflatun.SceneReference;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     [CreateAssetMenu(fileName = nameof(AppScenesConfig), menuName = "Config/" + nameof(AppScenesConfig), order = 0)]
     public class AppScenesConfig : ScriptableObject

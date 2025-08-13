@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class SpaceStation : MonoBehaviour
     {

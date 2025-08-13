@@ -1,63 +1,43 @@
 ﻿using System;
+using R3;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-namespace S1LV3Rman.RockFall.UI
+namespace S1LV3Rman.RockFall
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public abstract class BaseUIPanel : MonoBehaviour
+    public abstract class BaseUIPanel : UIBehaviour
     {
         [OnFieldChanged(nameof(SetOpened))]
         [SerializeField] private bool _isOpened;
 
-        public event Action AfterOpen;
-        public event Action AfterClose;
+        private ReactiveProperty<bool> _isOpenedInner;
+        public ReadOnlyReactiveProperty<bool> IsOpened => _isOpenedInner;
 
-        public bool IsOpened
+        private IDisposable _subscription;
+
+        protected override void Awake()
         {
-            get => _isOpened;
-            private set => _isOpened = value;
+            _isOpenedInner = new ReactiveProperty<bool>(_isOpened);
+            _subscription = _isOpenedInner.Subscribe(OnOpenedChanged);
         }
 
-        public void SetOpened(bool open)
+        public void SetOpened(bool isOpened) => _isOpenedInner.Value = isOpened;
+        public void Open() => SetOpened(true);
+        public void Close() => SetOpened(false);
+        public void Toggle() => SetOpened(!IsOpened.CurrentValue);
+
+        private void OnOpenedChanged(bool isOpened)
         {
-            if (open)
-                Open();
+            if (isOpened)
+                OnOpen();
             else
-                Close();
+                OnClose();
         }
-
-        public void Open()
-        {
-            if (IsOpened)
-                return;
-
-            OnOpen();
-            // _openTransition.Begin();
-            IsOpened = true;
-            AfterOpen?.Invoke();
-        }
-
         protected abstract void OnOpen();
-
-        public void Close()
-        {
-            if (!IsOpened)
-                return;
-
-            OnClose();
-            // _closeTransition.Begin();
-            IsOpened = false;
-            AfterClose?.Invoke();
-        }
 
         protected abstract void OnClose();
 
-        public void Toggle()
-        {
-            if (IsOpened)
-                Close();
-            else
-                Open();
-        }
+        protected override void OnDestroy() => _subscription.Dispose();
     }
 }

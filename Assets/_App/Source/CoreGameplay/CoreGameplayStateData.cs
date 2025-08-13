@@ -1,4 +1,6 @@
-namespace S1LV3Rman.RockFall
+using S1LV3Rman.RockFall.App;
+
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public struct CoreGameplayStateData : IStateData
     {

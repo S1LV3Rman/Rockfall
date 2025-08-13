@@ -2,7 +2,7 @@
 #if UNITY_EDITOR
 #endif
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public sealed class CameraFollowTarget : CameraController
     {

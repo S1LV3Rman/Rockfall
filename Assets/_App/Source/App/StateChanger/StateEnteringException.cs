@@ -1,6 +1,6 @@
 using System;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public class StateEnteringException : Exception
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     enum EngineMode { Hold, Acceleration, Deceleration }
     public class ShipEngines : MonoBehaviour {

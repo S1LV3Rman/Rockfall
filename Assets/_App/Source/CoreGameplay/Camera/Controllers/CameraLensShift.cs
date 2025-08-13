@@ -1,11 +1,10 @@
 ﻿using DG.Tweening;
-using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public sealed class CameraLensShift : CameraController
     {

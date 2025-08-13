@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Eflatun.SceneReference;
 using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.App
 {
     public abstract class SingleSceneAppState<TScope, TStateData> : IAppState<TStateData>
         where TScope : AppStateLifetimeScope<TStateData>

@@ -1,25 +1,21 @@
 ﻿using UnityEngine;
 
-namespace S1LV3Rman.RockFall
+namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class Boundary : MonoBehaviour
+    public sealed class Boundary : MonoBehaviour
     {
-        // Показывает предупреждающую рамку, когда игрок
-        // улетает слишком далеко от центра
-        public float warningRadius = 400.0f;
-
-        // Расстояние от центра, удаление на которое вызывает завершение игры
-        public float destroyRadius = 450.0f;
+        [field: SerializeField] public float WarningRadius { get; } = 400.0f;
+        [field: SerializeField] public float DestroyRadius { get; } = 450.0f;
 
         public void OnDrawGizmosSelected()
         {
-            // Желтым цветом показать сферу предупреждения
+            // Желтым цветом рисуем сферу предупреждения
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, warningRadius);
+            Gizmos.DrawWireSphere(transform.position, WarningRadius);
 
             // ...а красным — сферу уничтожения
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, destroyRadius);
+            Gizmos.DrawWireSphere(transform.position, DestroyRadius);
         }
     }
 }
