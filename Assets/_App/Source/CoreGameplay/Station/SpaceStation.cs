@@ -2,7 +2,7 @@
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class SpaceStation : MonoBehaviour
+    public class SpaceStation : AliveTrackedMonoBehaviour
     {
         [SerializeField] private Color _indicatorColor;
         [SerializeField] private Color _indicatorHealthColor;

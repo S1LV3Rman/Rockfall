@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a963f64e79246629e278428ac9f76ad, type: 3}
   m_Name: SpaceShipsConfig
   m_EditorClassIdentifier: 
-  BasicShip: {fileID: 0}
+  <BasicShip>k__BackingField: {fileID: 3131182986081299338, guid: ee1e312cae12f9643990da81580f822e,
+    type: 3}

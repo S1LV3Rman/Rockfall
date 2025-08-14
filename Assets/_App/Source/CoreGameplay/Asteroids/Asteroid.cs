@@ -3,28 +3,26 @@ using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class Asteroid : MonoBehaviour
+    public class Asteroid : AliveTrackedMonoBehaviour
     {
-        [SerializeField] private float speed = 10.0f;
-        [SerializeField] private Color _indicatorColor;
-        [SerializeField] private Color _indicatorHealthColor;
-        [SerializeField] private float _indicatorSize = 0.5f;
-        public event Action<Asteroid> OnDestroyed;
-
-        private void OnDestroy()
-        {
-            OnDestroyed?.Invoke(this);
-        }
+        [SerializeField] private Rigidbody _rigidbody;
+        
+        [field: SerializeField] public Color IndicatorColor { get; }
+        [field: SerializeField] public Color IndicatorHealthColor { get; }
+        [field: SerializeField] public float IndicatorSize { get; } = 0.5f;
 
         public void SetTarget(Transform target)
         {
-            transform.LookAt(target);
-            GetComponent<Rigidbody>().linearVelocity = transform.forward * speed;
-
-            IndicatorManager.Instance.AddIndicator(transform, _indicatorColor, _indicatorSize)
-                .WithHealth(_indicatorHealthColor)
+            IndicatorManager.Instance.AddIndicator(transform, IndicatorColor, IndicatorSize)
+                .WithHealth(IndicatorHealthColor)
                 .WithDistance(target)
                 .WithName(nameof(Asteroid));
+        }
+
+        public void Launch(Vector3 velocity, Vector3 angularVelocity)
+        {
+            _rigidbody.linearVelocity = velocity;
+            _rigidbody.angularVelocity = angularVelocity;
         }
     }
 }

@@ -38,8 +38,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             if (destructionPrefab != null) 
                 Instantiate(destructionPrefab, transform.position, transform.rotation);
 
-            if (gameOverOnDestroyed) 
-                GameManager.Instance.GameOver();
+            // if (gameOverOnDestroyed) 
+            //     GameManager.Instance.GameOver();
         }
     }
 }

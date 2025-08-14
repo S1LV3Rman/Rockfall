@@ -2,14 +2,9 @@ using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class SpaceShip : MonoBehaviour
+    public class SpaceShip : AliveTrackedMonoBehaviour
     {
-        public ShipEngines Engines;
-        public ShipWeaponry Weaponry;
-
-        public void Destroy()
-        {
-            Destroy(gameObject);
-        }
+        [field: SerializeField] public ShipEngines Engines { get; }
+        [field: SerializeField] public ShipWeaponry Weaponry { get; }
     }
 }

@@ -9,6 +9,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         [Header("Scene")]
         [SerializeField] private GameplayCamera _camera;
+        [SerializeField] private Transform _world;
         [SerializeField] private Transform _stationStartPoint;
         [SerializeField] private Transform _shipStartPoint;
 
@@ -23,12 +24,18 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         {
             builder.RegisterInstance(_camera);
 
+            builder.RegisterInstance(_world).Keyed("World");
             builder.RegisterInstance(_stationStartPoint).Keyed("StationStart");
             builder.RegisterInstance(_shipStartPoint).Keyed("ShipStart");
             
             builder.RegisterInstance(_spaceShipsConfig);
             builder.RegisterInstance(_spaceStationsConfig);
             builder.RegisterInstance(_weaponsConfig);
+
+            builder.Register<SpaceShipsPool>(Lifetime.Singleton);
+            builder.Register<SpaceShipsFactory>(Lifetime.Singleton);
+            builder.Register<SpaceStationsPool>(Lifetime.Singleton);
+            builder.Register<SpaceStationsFactory>(Lifetime.Singleton);
 
             builder.Register<CurrentGameState>(Lifetime.Singleton);
 

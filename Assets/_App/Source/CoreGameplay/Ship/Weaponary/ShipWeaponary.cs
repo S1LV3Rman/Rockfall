@@ -6,9 +6,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class ShipWeaponry : MonoBehaviour
     {
-        [SerializeField] private List<Transform> _weaponSlots;
-        [SerializeField] private LaserWeapon _laserWeaponPrefab;
-        [SerializeField] private RapidWeapon _rapidWeaponPrefab;
+        [field: SerializeField] public List<Transform> WeaponSlots { get; }
         [SerializeField] private float _aimAssistCone = 15f;
         [SerializeField][Range(0f, 10f)] private float _aimAssistStrength = 0.5f;
 
@@ -16,23 +14,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public Func<List<Transform>> GetAimTargets { get; set; }
 
-        public void EquipWeapons(WeaponType weaponType)
+        public void EquipWeapon(BaseWeapon weapon)
         {
-            var weaponPrefab = GetWeaponPrefab(weaponType);
-            if (weaponPrefab == null)
-                return;
-
-            foreach (var weaponSlot in _weaponSlots)
-                _equippedWeapons.Add(Instantiate(weaponPrefab, weaponSlot));
+            _equippedWeapons.Add(weapon);
         }
-
-        private BaseWeapon GetWeaponPrefab(WeaponType weaponType) => weaponType switch
-        {
-            WeaponType.Undefined => null,
-            WeaponType.RapidFire => _rapidWeaponPrefab,
-            WeaponType.LaserBeam => _laserWeaponPrefab,
-            _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null)
-        };
 
         private void Update()
         {

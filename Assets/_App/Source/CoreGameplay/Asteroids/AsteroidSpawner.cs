@@ -1,33 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using R3;
 using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class AsteroidSpawner : MonoBehaviour
+    public struct AsteroidSpawnRequest : ISpawnRequest
     {
-        [SerializeField] private float _radius = 250.0f;
+        public readonly Vector3 Position;
+        public readonly Vector3 Direction; // normalized
+        public readonly float LaunchSpeed;
+
+        public AsteroidSpawnRequest(in Vector3 position, in Vector3 direction, float launchSpeed)
+        {
+            Position = position;
+            Direction = direction;
+            LaunchSpeed = launchSpeed;
+        }
+    }
+
+    public sealed class AsteroidSpawner : MonoBehaviour, ISpawner<AsteroidSpawnRequest>
+    {
+        [SerializeField] private float _radius = 250f;
         [SerializeField] private float _height = 50f;
-        [SerializeField] private float _spawnDelay = 5.0f;
-        [SerializeField] private float _spawnDeviation = 1.0f;
-        [SerializeField] private Asteroid _asteroidPrefab;
+        [SerializeField] private float _spawnDelay = 5f;
+        [SerializeField] private float _spawnDeviation = 1f;
+        [SerializeField] private float _asteroidSpeed = 10f;
 
         private Transform _target;
         private bool _isActive;
         private float _nextSpawnTime;
 
-        private readonly List<Asteroid> _existingAsteroids = new();
-        public IReadOnlyList<Asteroid> ExistingAsteroids => _existingAsteroids;
+        private readonly Subject<AsteroidSpawnRequest> _requests = new();
+        public Observable<AsteroidSpawnRequest> Requests { get; }
 
-        public void StartLaunchingAt(Transform target)
+        public void SetTarget(Transform target)
         {
-            _isActive = true;
             _target = target;
-            _nextSpawnTime = Time.time;
         }
-
-        public void StopLaunching()
+        
+        public void SetActive(bool active)
         {
-            _isActive = false;
+            _isActive = active;
+            if (active)
+                _nextSpawnTime = Time.time;
         }
 
         private void Update()
@@ -35,22 +49,24 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             if (!_isActive || _nextSpawnTime > Time.time)
                 return;
 
-            _existingAsteroids.Add(CreateNewAsteroid());
+            var spawnRequest = CreateSpawnRequest();
+            _requests.OnNext(spawnRequest);
+
             _nextSpawnTime = Time.time + _spawnDelay + Random.Range(-_spawnDeviation, _spawnDeviation);
         }
 
-        private Asteroid CreateNewAsteroid()
+        private AsteroidSpawnRequest CreateSpawnRequest()
         {
-            var asteroidPosition = GetRandomPointOnCylinderSide(_height, _radius);
-            asteroidPosition += transform.position;
+            var position = GetRandomPointOnCylinderSide(_height, _radius) + transform.position;
+            var direction = _target != null
+                ? _target.position - position
+                : transform.forward;
 
-            var newAsteroid = Instantiate(_asteroidPrefab, transform);
-            newAsteroid.transform.position = asteroidPosition;
-            newAsteroid.SetTarget(_target);
+            if (direction.sqrMagnitude < 1e-6f)
+                direction = transform.forward;
+            direction.Normalize();
 
-            newAsteroid.OnDestroyed += RemoveAsteroid;
-
-            return newAsteroid;
+            return new AsteroidSpawnRequest(position, direction, _asteroidSpeed);
         }
 
         /// <summary>
@@ -71,71 +87,17 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             return new Vector3(x, y, z);
         }
 
-        private void RemoveAsteroid(Asteroid asteroid)
-        {
-            asteroid.OnDestroyed -= RemoveAsteroid;
-            _existingAsteroids.Remove(asteroid);
-        }
-
-        public void DestroyAllAsteroids()
-        {
-            foreach (var asteroid in _existingAsteroids)
-            {
-                asteroid.OnDestroyed -= RemoveAsteroid;
-                Destroy(asteroid.gameObject);
-            }
-
-            _existingAsteroids.Clear();
-        }
-
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
             Gizmos.matrix = transform.localToWorldMatrix;
-            DrawWireCylinder(Vector3.zero, _radius, _height, Quaternion.identity);
+            GizmosExtensions.DrawWireCylinder(Vector3.zero, _radius, _height, Quaternion.identity);
         }
-        
-        /// <summary>
-        /// Draws a wireframe cylinder using Gizmos.
-        /// </summary>
-        /// <param name="position">Center of the cylinder.</param>
-        /// <param name="radius">Radius of the cylinder.</param>
-        /// <param name="height">Height of the cylinder.</param>
-        /// <param name="rotation">Orientation of the cylinder.</param>
-        /// <param name="segments">Number of segments to approximate the circle.</param>
-        private static void DrawWireCylinder(Vector3 position, float radius, float height, Quaternion rotation, int segments = 32)
+
+        private void OnDestroy()
         {
-            float halfHeight = height / 2f;
-            Vector3 up = rotation * Vector3.up;
-            Vector3 centerTop = position + up * halfHeight;
-            Vector3 centerBottom = position - up * halfHeight;
-
-            Vector3 prevTop = Vector3.zero;
-            Vector3 prevBottom = Vector3.zero;
-
-            for (int i = 0; i <= segments; i++)
-            {
-                float angle = 2f * Mathf.PI * i / segments;
-                float x = Mathf.Cos(angle) * radius;
-                float z = Mathf.Sin(angle) * radius;
-                Vector3 offset = rotation * new Vector3(x, 0f, z);
-
-                Vector3 topPoint = centerTop + offset;
-                Vector3 bottomPoint = centerBottom + offset;
-
-                if (i > 0)
-                {
-                    Gizmos.DrawLine(prevTop, topPoint);       // Top ring
-                    Gizmos.DrawLine(prevBottom, bottomPoint); // Bottom ring
-                    Gizmos.DrawLine(prevTop, prevBottom);     // Side vertical
-                }
-
-                prevTop = topPoint;
-                prevBottom = bottomPoint;
-            }
-
-            // Last vertical line
-            Gizmos.DrawLine(prevTop, prevBottom);
+            _requests.OnCompleted();
+            _requests.Dispose();
         }
     }
 }
