@@ -1,10 +1,11 @@
+using System;
+using R3;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class DamageNumber : UIBehaviour
+    public class DamageNumber : AliveTrackedUIBehaviour
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private AnimationCurve _flyOverLifetime;
@@ -16,7 +17,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         private RectTransform _rectTransform;
         private RectTransform _parent;
-        
+
         private Vector3 _initialPosition;
         private Camera _camera;
 
@@ -24,9 +25,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private float _initialSize;
         private float _showTime;
         private float _deathTime;
-        private bool _isShown;
 
-        public bool IsAlive => Time.time < _deathTime;
+        private IDisposable _subscription;
+
+        private ReactiveProperty<bool> _isShown;
+        public ReadOnlyReactiveProperty<bool> IsShown => _isShown;
 
         protected override void Awake()
         {
@@ -34,32 +37,41 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _parent = (RectTransform) transform.parent;
         }
 
-        public void Show(Vector3 startPosition, int damageAmount, Camera mainCamera)
+        public void Show(Vector3 startPosition, int damageAmount,
+            float horizontalDeviation, float lifetime, float size, Color color,
+            AnimationCurve flyOverLifetime, Camera mainCamera)
         {
             _initialPosition = startPosition;
             _camera = mainCamera;
+            _flyOverLifetime = flyOverLifetime;
 
-            _deviation = Random.Range(-_horizontalDeviation, _horizontalDeviation);
-            _deathTime = Time.time + _lifetimePerAmount.Evaluate(damageAmount);
+            _deviation = horizontalDeviation;
             _showTime = Time.time;
+            _deathTime = _showTime + lifetime;
 
             _text.SetText(damageAmount.ToString());
-            _text.fontSize = _initialSize = _sizePerAmount.Evaluate(damageAmount);
-            _text.color = _colorPerAmount.Evaluate(damageAmount);
+            _text.fontSize = _initialSize = size;
+            _text.color = color;
+            
+            SetPositionAt(0f);
 
-            _isShown = true;
+            _isShown.Value = true;
             gameObject.SetActive(true);
+
+            _subscription = Observable.Timer(TimeSpan.FromSeconds(lifetime))
+                .Subscribe(_ => Hide());
         }
 
         public void Hide()
         {
-            _isShown = false;
+            _isShown.Value = false;
             gameObject.SetActive(false);
+            _subscription?.Dispose();
         }
 
         private void LateUpdate()
         {
-            if (!_isShown || !IsAlive)
+            if (!_isShown.CurrentValue)
                 return;
 
             var lifetime = Time.time - _showTime;
@@ -79,8 +91,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 _parent, targetPosition, _camera, out var localPoint);
-            
+
             _rectTransform.anchoredPosition = localPoint;
+        }
+
+        public override void Dispose()
+        {
+            _subscription?.Dispose();
+            base.Dispose();
         }
     }
 }

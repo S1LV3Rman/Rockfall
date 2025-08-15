@@ -28,7 +28,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             
             CurrentHealth -= amount;
             
-            DamageNumbersManager.Instance.Create(transform.position, amount);
+            // DamageNumbersManager.Instance.Create(transform.position, amount);
 
             if (CurrentHealth > 0)
                 return;

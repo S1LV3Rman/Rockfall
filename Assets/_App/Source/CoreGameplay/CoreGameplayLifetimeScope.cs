@@ -13,7 +13,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         [SerializeField] private Transform _stationStartPoint;
         [SerializeField] private Transform _shipStartPoint;
 
-        // [Header("UI")]
+        [Header("UI")]
+        [SerializeField] private RectTransform _indicators;
+        [SerializeField] private RectTransform _damageNumbers;
 
         [Header("Configs")]
         [SerializeField] private SpaceShipsConfig _spaceShipsConfig;
@@ -27,6 +29,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             builder.RegisterInstance(_world).Keyed("World");
             builder.RegisterInstance(_stationStartPoint).Keyed("StationStart");
             builder.RegisterInstance(_shipStartPoint).Keyed("ShipStart");
+            
+            builder.RegisterInstance(_indicators).Keyed("Indicators");
+            builder.RegisterInstance(_indicators).Keyed("DamageNumbers");
             
             builder.RegisterInstance(_spaceShipsConfig);
             builder.RegisterInstance(_spaceStationsConfig);

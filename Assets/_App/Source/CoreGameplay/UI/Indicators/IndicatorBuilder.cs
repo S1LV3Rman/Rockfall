@@ -45,7 +45,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             return this;
         }
 
-        public IndicatorBuilder WithDistance(Transform targetForDistance)
+        public IndicatorBuilder WithDistanceTo(AliveTrackedMonoBehaviour targetForDistance)
         {
             var distanceIndicator = Object.Instantiate(_distanceIndicatorPrefab, _indicator.transform);
             distanceIndicator.SetDistanceTargets(_indicator.Target, targetForDistance);

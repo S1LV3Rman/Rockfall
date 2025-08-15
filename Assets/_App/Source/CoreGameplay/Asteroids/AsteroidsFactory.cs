@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -9,12 +10,16 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private readonly AsteroidsPool _pool;
         private readonly AsteroidsConfig _config;
         private readonly Transform _world;
+        private readonly IndicatorsFactory _indicatorsFactory;
+        private readonly SpaceStationsPool _stationsPool;
         private readonly RandomService _randomService;
 
         public AsteroidsFactory(
             AsteroidsPool pool,
             AsteroidsConfig config,
             [Key("World")] Transform world,
+            IndicatorsFactory indicatorsFactory,
+            SpaceStationsPool stationsPool,
             RandomService randomService,
             LifetimeScope lifetimeScope
         ) : base(lifetimeScope)
@@ -22,6 +27,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _pool = pool;
             _config = config;
             _world = world;
+            _indicatorsFactory = indicatorsFactory;
+            _stationsPool = stationsPool;
             _randomService = randomService;
         }
 
@@ -35,6 +42,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var asteroidPrefab = _config.BasicAsteroid;
             var asteroid = Container.Instantiate(asteroidPrefab, 
                 spawnRequest.Position, Quaternion.LookRotation(spawnRequest.Direction), _world);
+
+            var station = _stationsPool.First();
+            _indicatorsFactory.CreateIndicator(asteroid, asteroid.IndicatorColor, asteroid.IndicatorSize)
+                .WithHealth(asteroid.IndicatorHealthColor)
+                .WithDistanceTo(station)
+                .WithName(asteroid.Name);
 
             var velocity = spawnRequest.Direction * spawnRequest.LaunchSpeed;
             var angularVelocity = _randomService.Direction();

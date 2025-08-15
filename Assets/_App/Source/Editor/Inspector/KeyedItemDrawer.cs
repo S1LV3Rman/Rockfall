@@ -8,15 +8,31 @@ namespace S1LV3Rman.RockFall.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var keyProp = property.FindPropertyRelative("Key");
-            var valueProp = property.FindPropertyRelative("Value");
+            EditorGUI.BeginProperty(position, label, property);
+            EditorGUI.BeginChangeCheck();
 
-            var halfWidth = position.width / 2f;
-            var keyRect = new Rect(position.x, position.y, halfWidth - 2, position.height);
-            var valueRect = new Rect(position.x + halfWidth + 2, position.y, halfWidth - 2, position.height);
+            var nested = property.IsInsideOfArray() || label == GUIContent.none;
 
-            EditorGUI.PropertyField(keyRect, keyProp, GUIContent.none);
-            EditorGUI.PropertyField(valueRect, valueProp, GUIContent.none);
+            if (!nested) 
+                position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            position.width *= 0.5f;
+            position.width -= 2f;
+
+            var keyProp = property.FindPropertyRelative("<Key>k__BackingField");
+            var valueProp = property.FindPropertyRelative("<Value>k__BackingField");
+
+            keyProp.DrawWithoutLabel(ref position, GUIFlow.Horizontal);
+            position.x += 4f;
+            valueProp.DrawWithoutLabel(ref position);
+
+            if (EditorGUI.EndChangeCheck())
+                property.serializedObject.ApplyModifiedProperties();
+            EditorGUI.EndProperty();
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUIUtility.singleLineHeight;
         }
     }
 

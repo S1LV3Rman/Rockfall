@@ -2,14 +2,15 @@ using System;
 using R3;
 using R3.Triggers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace S1LV3Rman.RockFall
 {
-    public class AliveTrackedMonoBehaviour : MonoBehaviour, IDisposable
+    public class AliveTrackedUIBehaviour : UIBehaviour, IDisposable
     {
         public ReadOnlyReactiveProperty<bool> IsAlive { get; private set; }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
             IsAlive = Observable.Merge(
                     Observable.Return(true), // initial state
@@ -19,10 +20,11 @@ namespace S1LV3Rman.RockFall
 
         public void Destroy()
         {
-            Destroy(gameObject);
+            if (IsAlive.CurrentValue)
+                Destroy(gameObject);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Destroy();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
@@ -7,17 +6,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         [SerializeField] private Rigidbody _rigidbody;
         
-        [field: SerializeField] public Color IndicatorColor { get; }
-        [field: SerializeField] public Color IndicatorHealthColor { get; }
-        [field: SerializeField] public float IndicatorSize { get; } = 0.5f;
-
-        public void SetTarget(Transform target)
-        {
-            IndicatorManager.Instance.AddIndicator(transform, IndicatorColor, IndicatorSize)
-                .WithHealth(IndicatorHealthColor)
-                .WithDistance(target)
-                .WithName(nameof(Asteroid));
-        }
+        [field: SerializeField] public string Name { get; private set; }
+        [field: SerializeField] public Color IndicatorColor { get; private set; }
+        [field: SerializeField] public Color IndicatorHealthColor { get; private set; }
+        [field: SerializeField] public float IndicatorSize { get; private set; } = 0.5f;
 
         public void Launch(Vector3 velocity, Vector3 angularVelocity)
         {

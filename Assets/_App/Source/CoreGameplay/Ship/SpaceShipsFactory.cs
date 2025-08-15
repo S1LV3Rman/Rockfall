@@ -12,10 +12,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private readonly Transform _world;
         private readonly Transform _startingPoint;
         private readonly WeaponsConfig _weaponsConfig;
+        private readonly IndicatorsFactory _indicatorsFactory;
 
         public SpaceShipsFactory(
             SpaceShipsConfig shipsConfig,
             WeaponsConfig weaponsConfig,
+            IndicatorsFactory indicatorsFactory,
             SpaceShipsPool pool,
             [Key("World")] Transform world,
             [Key("SpaceShip")] Transform startingPoint,
@@ -27,6 +29,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _world = world;
             _startingPoint = startingPoint;
             _weaponsConfig = weaponsConfig;
+            _indicatorsFactory = indicatorsFactory;
         }
 
         protected override void Installation(IContainerBuilder builder)
@@ -46,6 +49,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             {
                 var weapon = Container.Instantiate(weaponPrefab, weaponSlot);
                 ship.Weaponry.EquipWeapon(weapon);
+
+                var aimPoint = weapon.AimPoint;
+                _indicatorsFactory.CreateIndicator(aimPoint,
+                    aimPoint.IndicatorColor, aimPoint.IndicatorSize, aimPoint.IndicatorImage);
             }
 
             _pool.Add(ship);

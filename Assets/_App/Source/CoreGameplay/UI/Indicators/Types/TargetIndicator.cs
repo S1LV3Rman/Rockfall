@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using System;
+using R3;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class TargetIndicator : UIBehaviour
+    public class TargetIndicator : AliveTrackedUIBehaviour
     {
         [SerializeField] private Image _image;
         [SerializeField] private int _margin = 25;
@@ -12,7 +13,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private Vector3 _initialScale;
         private Camera _mainCamera;
 
-        public Transform Target { get; private set; }
+        private IDisposable _subscription;
+
+        public AliveTrackedMonoBehaviour Target { get; private set; }
 
         public Color Color
         {
@@ -38,9 +41,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public bool HasCustomSprite { get; private set; }
 
-        public void FollowTarget(Transform target, Camera mainCamera)
+        public void FollowTarget(AliveTrackedMonoBehaviour target, Camera mainCamera)
         {
             Target = target;
+            _subscription = target.IsAlive
+                .Where(isAlive => !isAlive)
+                .Take(1)
+                .Subscribe(_ => Destroy());
+            
             _mainCamera = mainCamera;
             _image.gameObject.SetActive(true);
         }
@@ -54,16 +62,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         // Обновляет положение индикатора в каждом кадре
         private void LateUpdate()
         {
-            // Цель исчезла? Если да, значит, индикатор тоже надо убрать
-            if (Target == null)
-            {
-                Destroy(gameObject);
+            if (!isActiveAndEnabled)
                 return;
-            }
-
+            
             //Определить экранные координаты объекта
             var viewportPoint =
-                _mainCamera.WorldToViewportPoint(Target.position);
+                _mainCamera.WorldToViewportPoint(Target.transform.position);
 
             // Объект за границей экрана?
             if (viewportPoint.z < 0 ||
@@ -135,6 +139,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             // Обновить позицию индикатора
             var rectTransform = GetComponent<RectTransform>();
             rectTransform.localPosition = localPosition;
+        }
+
+        public override void Dispose()
+        {
+            _subscription?.Dispose();
+            base.Dispose();
         }
     }
 }

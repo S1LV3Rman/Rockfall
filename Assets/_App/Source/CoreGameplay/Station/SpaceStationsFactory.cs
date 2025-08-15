@@ -10,12 +10,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private readonly SpaceStationsConfig _config;
         private readonly Transform _world;
         private readonly Transform _startingPoint;
+        private readonly IndicatorsFactory _indicatorsFactory;
 
         public SpaceStationsFactory(
             SpaceStationsPool pool,
             SpaceStationsConfig config,
             [Key("World")] Transform world,
             [Key("SpaceStation")] Transform startingPoint,
+            IndicatorsFactory indicatorsFactory,
             LifetimeScope lifetimeScope
         ) : base(lifetimeScope)
         {
@@ -23,6 +25,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _config = config;
             _world = world;
             _startingPoint = startingPoint;
+            _indicatorsFactory = indicatorsFactory;
         }
 
         protected override void Installation(IContainerBuilder builder)
@@ -34,6 +37,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var station = Container.Instantiate(
                 _config.BasicStation, _startingPoint.position, _startingPoint.rotation, _world);
             _pool.Add(station);
+            
+            _indicatorsFactory.CreateIndicator(station, station.IndicatorColor, station.IndicatorSize)
+                .WithHealth(station.IndicatorHealthColor)
+                .WithName(station.Name);
+            
             return station;
         }
     }

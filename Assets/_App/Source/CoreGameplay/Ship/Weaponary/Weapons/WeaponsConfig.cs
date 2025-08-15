@@ -7,11 +7,4 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         [field: SerializeField] public KeyedList<WeaponType, BaseWeapon> Weapons { get; private set; }
     }
-
-    // [Serializable]
-    // public struct WeaponData
-    // {
-    //     public WeaponType Type;
-    //     public BaseWeapon Prefab;
-    // }
 }

@@ -7,8 +7,8 @@ namespace S1LV3Rman.RockFall
     [Serializable]
     public struct KeyedItem<TKey, TValue>
     {
-        public TKey Key { get; }
-        public TValue Value { get; }
+        [field: SerializeField] public TKey Key { get; private set; }
+        [field: SerializeField] public TValue Value { get; private set; }
 
         public KeyedItem(TKey key, TValue value)
         {

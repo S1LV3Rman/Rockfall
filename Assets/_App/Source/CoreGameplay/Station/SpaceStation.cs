@@ -4,15 +4,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class SpaceStation : AliveTrackedMonoBehaviour
     {
-        [SerializeField] private Color _indicatorColor;
-        [SerializeField] private Color _indicatorHealthColor;
-        [SerializeField] private float _indicatorSize = 2f;
-
-        void Start()
-        {
-            IndicatorManager.Instance.AddIndicator(transform, _indicatorColor, _indicatorSize)
-                .WithHealth(_indicatorHealthColor)
-                .WithName("Space Station");
-        }
+        [field: SerializeField] public string Name { get; private set; }
+        [field: SerializeField] public Color IndicatorColor { get; private set; }
+        [field: SerializeField] public Color IndicatorHealthColor { get; private set; }
+        [field: SerializeField] public float IndicatorSize { get; private set; } = 2f;
     }
 }

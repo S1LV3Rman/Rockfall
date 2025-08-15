@@ -4,14 +4,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public sealed class GameplayCamera : MonoBehaviour
     {
-        public Camera Camera;
-        public CameraFollowTarget _follow;
-        public CameraLensShift _lensShift;
+        [field: SerializeField] public Camera Camera { get; private set; }
+        [field: SerializeField] public CameraFollowTarget Follow { get; private set; }
+        [field: SerializeField] public CameraLensShift LensShift { get; private set; }
 
         public void SetControlsActive(bool isActive)
         {
-            if (_follow != null) _follow.SetActive(isActive);
-            if (_lensShift != null) _lensShift.SetActive(isActive);
+            if (Follow != null) Follow.SetActive(isActive);
+            if (LensShift != null) LensShift.SetActive(isActive);
         }
 
         public Vector2 WorldToScreenPoint(Vector3 worldPoint) =>

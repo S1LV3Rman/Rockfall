@@ -24,7 +24,13 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public void SetSprite(Sprite sprite) => _healthBar.sprite = sprite;
 
-        private void LateUpdate() => UpdateHealth();
+        private void LateUpdate()
+        {
+            if (!isActiveAndEnabled)
+                return;
+            
+            UpdateHealth();
+        }
 
         private void UpdateHealth()
         {
