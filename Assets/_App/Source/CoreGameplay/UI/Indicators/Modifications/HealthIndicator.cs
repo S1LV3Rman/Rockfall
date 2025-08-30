@@ -4,16 +4,15 @@ using UnityEngine.UI;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class HealthIndicator : UIBehaviour
+    public class HealthIndicator : UIBehaviour, IIndicatorModification
     {
         [SerializeField] private Image _healthBar;
         
-        private DamageTaking _damageTaking;
+        private DamageTaking _target;
 
         public void SetTarget(DamageTaking target)
         {
-            _damageTaking = target;
-            UpdateHealth();
+            _target = target;
         }
 
         public void SetColor(Color color)
@@ -24,9 +23,17 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public void SetSprite(Sprite sprite) => _healthBar.sprite = sprite;
 
+        public void AttachToIndicator(Indicator indicator)
+        {
+            UpdateHealth();
+        }
+
         private void LateUpdate()
         {
             if (!isActiveAndEnabled)
+                return;
+
+            if (_target == null)
                 return;
             
             UpdateHealth();
@@ -34,9 +41,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         private void UpdateHealth()
         {
-            _healthBar.fillAmount = _damageTaking.MaxHealth > 0
-                ? (float) _damageTaking.CurrentHealth / _damageTaking.MaxHealth
+            _healthBar.fillAmount = _target.MaxHealth > 0
+                ? (float) _target.CurrentHealth / _target.MaxHealth
                 : 0f;
+        }
+
+        public void Remove()
+        {
+            Destroy(gameObject);
         }
     }
 }

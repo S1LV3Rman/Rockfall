@@ -42,12 +42,15 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var asteroidPrefab = _config.BasicAsteroid;
             var asteroid = Container.Instantiate(asteroidPrefab, 
                 spawnRequest.Position, Quaternion.LookRotation(spawnRequest.Direction), _world);
-
+            
             var station = _stationsPool.First();
-            _indicatorsFactory.CreateIndicator(asteroid, asteroid.IndicatorColor, asteroid.IndicatorSize)
-                .WithHealth(asteroid.IndicatorHealthColor)
-                .WithDistanceTo(station)
-                .WithName(asteroid.Name);
+            _indicatorsFactory.CreateIndicator()
+                .WithTargetFollowing(asteroid)
+                .WithHealth(asteroid, asteroid.IndicatorHealthColor)
+                .WithDistance(asteroid, station)
+                .WithName(asteroid.Name)
+                .Colored(asteroid.IndicatorColor)
+                .OfSize(asteroid.IndicatorSize);
 
             var velocity = spawnRequest.Direction * spawnRequest.LaunchSpeed;
             var angularVelocity = _randomService.Direction();

@@ -38,9 +38,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
                 _config.BasicStation, _startingPoint.position, _startingPoint.rotation, _world);
             _pool.Add(station);
             
-            _indicatorsFactory.CreateIndicator(station, station.IndicatorColor, station.IndicatorSize)
-                .WithHealth(station.IndicatorHealthColor)
-                .WithName(station.Name);
+            _indicatorsFactory.CreateIndicator()
+                .WithTargetFollowing(station)
+                .WithHealth(station, station.IndicatorHealthColor)
+                .WithName(station.Name)
+                .Colored(station.IndicatorColor)
+                .OfSize(station.IndicatorSize);
             
             return station;
         }

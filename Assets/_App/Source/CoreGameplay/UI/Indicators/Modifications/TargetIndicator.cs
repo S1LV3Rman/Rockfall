@@ -1,62 +1,44 @@
-﻿using System;
-using R3;
+﻿using R3;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class TargetIndicator : AliveTrackedUIBehaviour
+    public class TargetIndicator : UIBehaviour, IIndicatorModification
     {
-        [SerializeField] private Image _image;
         [SerializeField] private int _margin = 25;
 
-        private Vector3 _initialScale;
-        private Camera _mainCamera;
+        private Indicator _indicator;
+        private RectTransform _indicatorRectTransform;
+        private RectTransform _parentRectTransform;
 
-        private IDisposable _subscription;
-
+        private readonly SerialDisposable _targetLostSub = new();
+        private readonly Subject<TargetIndicator> _targetLost = new();
+        public Observable<TargetIndicator> TargetLost => _targetLost;
         public AliveTrackedMonoBehaviour Target { get; private set; }
 
-        public Color Color
-        {
-            get => _image.color;
-            set => _image.color = value;
-        }
-
-        public Sprite Sprite
-        {
-            get => _image.sprite;
-            set
-            {
-                _image.sprite = value;
-                HasCustomSprite = true;
-            }
-        }
-
-        public float Scale
-        {
-            get => _initialScale.x;
-            set => _initialScale = new Vector3(value, value, value);
-        }
-
-        public bool HasCustomSprite { get; private set; }
-
-        public void FollowTarget(AliveTrackedMonoBehaviour target, Camera mainCamera)
+        public void FollowTarget(AliveTrackedMonoBehaviour target)
         {
             Target = target;
-            _subscription = target.IsAlive
+            
+            _targetLostSub.Dispose();
+            _targetLostSub.Disposable = target.IsAlive
                 .Where(isAlive => !isAlive)
                 .Take(1)
-                .Subscribe(_ => Destroy());
-            
-            _mainCamera = mainCamera;
-            _image.gameObject.SetActive(true);
+                .Subscribe(_ =>
+                {
+                    Target = null;
+                    _targetLost.OnNext(this);
+                });
         }
 
-        protected override void Awake()
+        public void AttachToIndicator(Indicator indicator)
         {
-            _initialScale = transform.localScale;
-            _image.gameObject.SetActive(false);
+            _indicator = indicator;
+            _indicatorRectTransform = (RectTransform) indicator.transform;
+            _parentRectTransform = (RectTransform) indicator.transform.parent;
+            
+            UpdatePosition();
         }
 
         // Обновляет положение индикатора в каждом кадре
@@ -64,10 +46,17 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         {
             if (!isActiveAndEnabled)
                 return;
+
+            if (Target == null)
+                return;
             
+            UpdatePosition();
+        }
+
+        private void UpdatePosition()
+        {
             //Определить экранные координаты объекта
-            var viewportPoint =
-                _mainCamera.WorldToViewportPoint(Target.transform.position);
+            var viewportPoint = _indicator.RenderCamera.WorldToViewportPoint(Target.transform.position);
 
             // Объект за границей экрана?
             if (viewportPoint.z < 0 ||
@@ -98,7 +87,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
                 viewportPoint.y = Mathf.Clamp(Mathf.Asin(viewportPoint.y) / 1.57f, -0.5f, 0.5f) + 0.5f;
 
                 // Устанавливаем размер индикатора на половину от изначального
-                transform.localScale = _initialScale * 0.5f;
+                _indicator.Size = 0.5f;
             }
             else
             {
@@ -110,14 +99,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
                 // Вычисляем необходимый размер индикатора
                 // в зависимости от растояния от центра экрана
-                transform.localScale = _initialScale *
-                                       Mathf.Clamp(1.0f - onViewportPoint.magnitude,
-                                           0.5f, 1.0f);
+                _indicator.Size = Mathf.Clamp(1.0f - onViewportPoint.magnitude, 0.5f, 1.0f);
             }
 
             // Определить видимые координаты для индикатора
-            var screenPoint =
-                _mainCamera.ViewportToScreenPoint(viewportPoint);
+            var screenPoint = _indicator.RenderCamera.ViewportToScreenPoint(viewportPoint);
 
             // Ограничить краями экрана
             screenPoint.x = Mathf.Clamp(
@@ -131,20 +117,20 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
             // Определить, где в области холста находится видимая координата
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                transform.parent.GetComponent<RectTransform>(),
+                _parentRectTransform,
                 screenPoint,
-                _mainCamera,
+                _indicator.RenderCamera,
                 out var localPosition);
 
             // Обновить позицию индикатора
-            var rectTransform = GetComponent<RectTransform>();
-            rectTransform.localPosition = localPosition;
+            _indicatorRectTransform.localPosition = localPosition;
         }
 
-        public override void Dispose()
+        public void Remove()
         {
-            _subscription?.Dispose();
-            base.Dispose();
+            _targetLostSub.Dispose();
+            _targetLost.OnCompleted(Result.Success);
+            Destroy(gameObject);
         }
     }
 }

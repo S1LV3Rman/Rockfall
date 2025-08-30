@@ -4,47 +4,35 @@ using R3;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public sealed class DamageNumbersPool : BasePool<DamageNumber>
+    public sealed class DamageNumbersPool : AliveObjectsPool<DamageNumber>
     {
-        private readonly List<DamageNumber> _hidden = new();
+        private readonly Dictionary<DamageNumber, IDisposable> _subscriptions = new();
 
-        private readonly IDisposable _subscriptions;
-
-        public DamageNumbersPool()
+        public override void Add(DamageNumber damageNumber)
         {
-            var transfer = OnAdded.SelectMany(damageNumber =>
-                    damageNumber.IsShown
-                        .TakeUntil(OnRemoved.Where(r => ReferenceEquals(r, damageNumber)))
-                        .Select(_ => damageNumber))
-                .Subscribe(TransferDamageNumber);
-            var removal = OnRemoved.Subscribe(damageNumber => _hidden.Remove(damageNumber));
-            _subscriptions = Disposable.Combine(transfer, removal);
+            base.Add(damageNumber);
+            _subscriptions[damageNumber] =
+                damageNumber.LifetimeExpiration.Subscribe(Release);
         }
 
-        private void TransferDamageNumber(DamageNumber damageNumber)
+        public override bool Remove(DamageNumber damageNumber)
         {
-            if (damageNumber.IsShown.CurrentValue)
-                _hidden.Remove(damageNumber);
-            else
-                _hidden.Add(damageNumber);
-        }
-
-        public bool TryGetDamageNumber(out DamageNumber damageNumber)
-        {
-            if (_hidden.Count <= 0)
+            var wasRemoved = base.Remove(damageNumber);
+            if (wasRemoved && _subscriptions.TryGetValue(damageNumber, out var sub))
             {
-                damageNumber = null;
-                return false;
+                sub.Dispose();
+                _subscriptions.Remove(damageNumber);
             }
-
-            damageNumber = _hidden[^1];
-            return true;
+            return wasRemoved;
         }
 
         public override void Dispose()
         {
+            foreach (var sub in _subscriptions.Values)
+                sub.Dispose();
+
+            _subscriptions.Clear();
             base.Dispose();
-            _subscriptions.Dispose();
         }
     }
 }

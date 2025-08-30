@@ -47,7 +47,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         private DamageNumber GetDamageNumber()
         {
-            if (_pool.TryGetDamageNumber(out var damageNumber))
+            if (_pool.TryPull(out var damageNumber))
                 return damageNumber;
 
             var newDamageNumber = Container.Instantiate(_config.Prefab, _uiContainer);

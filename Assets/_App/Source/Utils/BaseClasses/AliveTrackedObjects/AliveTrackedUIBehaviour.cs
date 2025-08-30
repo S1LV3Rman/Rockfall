@@ -1,12 +1,11 @@
 using System;
 using R3;
 using R3.Triggers;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace S1LV3Rman.RockFall
 {
-    public class AliveTrackedUIBehaviour : UIBehaviour, IDisposable
+    public class AliveTrackedUIBehaviour : UIBehaviour, IAliveTrackedObject, IDisposable
     {
         public ReadOnlyReactiveProperty<bool> IsAlive { get; private set; }
 
@@ -18,7 +17,7 @@ namespace S1LV3Rman.RockFall
                 .ToReadOnlyReactiveProperty();
         }
 
-        public void Destroy()
+        private void Destroy()
         {
             if (IsAlive.CurrentValue)
                 Destroy(gameObject);

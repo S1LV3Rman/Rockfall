@@ -2,7 +2,7 @@
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class Asteroid : AliveTrackedMonoBehaviour
+    public class Asteroid : AliveTrackedMonoBehaviour, IReusableInPool
     {
         [SerializeField] private Rigidbody _rigidbody;
         
@@ -15,6 +15,16 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         {
             _rigidbody.linearVelocity = velocity;
             _rigidbody.angularVelocity = angularVelocity;
+        }
+
+        public void PrepareForPulling()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void PrepareForReleasing()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

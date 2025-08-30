@@ -1,6 +1,6 @@
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class SpaceStationsPool : BasePool<SpaceStation>
+    public sealed class SpaceStationsPool : AliveObjectsPool<SpaceStation>
     {
     }
 }

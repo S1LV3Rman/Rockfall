@@ -49,10 +49,13 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             {
                 var weapon = Container.Instantiate(weaponPrefab, weaponSlot);
                 ship.Weaponry.EquipWeapon(weapon);
-
+                
                 var aimPoint = weapon.AimPoint;
-                _indicatorsFactory.CreateIndicator(aimPoint,
-                    aimPoint.IndicatorColor, aimPoint.IndicatorSize, aimPoint.IndicatorImage);
+                _indicatorsFactory.CreateIndicator()
+                    .WithTargetFollowing(aimPoint)
+                    .WithCustomSprite(aimPoint.IndicatorImage)
+                    .Colored(aimPoint.IndicatorColor)
+                    .OfSize(aimPoint.IndicatorSize);
             }
 
             _pool.Add(ship);

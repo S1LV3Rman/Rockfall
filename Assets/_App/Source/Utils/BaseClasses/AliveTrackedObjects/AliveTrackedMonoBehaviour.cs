@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace S1LV3Rman.RockFall
 {
-    public class AliveTrackedMonoBehaviour : MonoBehaviour, IDisposable
+    public class AliveTrackedMonoBehaviour : MonoBehaviour, IAliveTrackedObject, IDisposable
     {
         public ReadOnlyReactiveProperty<bool> IsAlive { get; private set; }
 
@@ -17,7 +17,7 @@ namespace S1LV3Rman.RockFall
                 .ToReadOnlyReactiveProperty();
         }
 
-        public void Destroy()
+        private void Destroy()
         {
             if (IsAlive.CurrentValue)
                 Destroy(gameObject);

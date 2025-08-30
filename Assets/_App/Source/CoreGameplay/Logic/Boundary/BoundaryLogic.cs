@@ -48,14 +48,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var distance = (_spaceShip.transform.position - _spaceStation.transform.position).magnitude;
 
             if (distance > _boundary.DestroyRadius)
-            {
-                _spaceShip.Destroy();
                 _currentGameState.Value = GameState.GameOver;
-            }
             else
-            {
                 _warningUI.SetOpened(distance > _boundary.WarningRadius);
-            }
         }
 
         public void Dispose()

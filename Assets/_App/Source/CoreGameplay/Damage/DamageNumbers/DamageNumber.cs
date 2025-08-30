@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class DamageNumber : AliveTrackedUIBehaviour
+    public class DamageNumber : AliveTrackedUIBehaviour, IReusableInPool
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private AnimationCurve _flyOverLifetime;
@@ -26,10 +26,13 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private float _showTime;
         private float _deathTime;
 
-        private IDisposable _subscription;
+        private bool _isAlive;
+        
+        private readonly SerialDisposable _lifetimeSub = new();
+        private readonly Subject<DamageNumber> _lifetimeExpired = new();
 
-        private ReactiveProperty<bool> _isShown;
-        public ReadOnlyReactiveProperty<bool> IsShown => _isShown;
+        // Emits each time the lifetime ends
+        public Observable<DamageNumber> LifetimeExpiration => _lifetimeExpired;
 
         protected override void Awake()
         {
@@ -55,25 +58,23 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             
             SetPositionAt(0f);
 
-            _isShown.Value = true;
+            _isAlive = true;
             gameObject.SetActive(true);
 
-            _subscription = Observable.Timer(TimeSpan.FromSeconds(lifetime))
-                .Subscribe(_ => Hide());
-        }
-
-        public void Hide()
-        {
-            _isShown.Value = false;
-            gameObject.SetActive(false);
-            _subscription?.Dispose();
+            _lifetimeSub.Disposable = Observable
+                .Timer(TimeSpan.FromSeconds(lifetime))
+                .Subscribe(_ =>
+                {
+                    _isAlive = false;
+                    _lifetimeExpired.OnNext(this);
+                });
         }
 
         private void LateUpdate()
         {
-            if (!_isShown.CurrentValue)
+            if (!_isAlive)
                 return;
-
+            
             var lifetime = Time.time - _showTime;
             SetPositionAt(lifetime);
 
@@ -81,7 +82,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _text.fontSize = Mathf.Lerp(_initialSize, _initialSize * _deathSizeDecrease, normalizedLifetime);
         }
 
-        public void SetPositionAt(float lifetime)
+        private void SetPositionAt(float lifetime)
         {
             var positionDelta = new Vector2(
                 _deviation * lifetime,
@@ -95,9 +96,18 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             _rectTransform.anchoredPosition = localPoint;
         }
 
+        public void PrepareForPulling()
+        {
+        }
+
+        public void PrepareForReleasing()
+        {
+            gameObject.SetActive(false);
+        }
+
         public override void Dispose()
         {
-            _subscription?.Dispose();
+            _lifetimeSub.Dispose();
             base.Dispose();
         }
     }
