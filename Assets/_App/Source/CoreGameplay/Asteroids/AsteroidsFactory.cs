@@ -46,11 +46,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var station = _stationsPool.First();
             _indicatorsFactory.CreateIndicator()
                 .WithTargetFollowing(asteroid)
-                .WithHealth(asteroid, asteroid.IndicatorHealthColor)
+                .WithHealth(asteroid, asteroid.Indicator.HealthColor)
                 .WithDistance(asteroid, station)
-                .WithName(asteroid.Name)
-                .Colored(asteroid.IndicatorColor)
-                .OfSize(asteroid.IndicatorSize);
+                .WithName(asteroid.Indicator.Name)
+                .Colored(asteroid.Indicator.Color)
+                .OfSize(asteroid.Indicator.Size);
 
             var velocity = spawnRequest.Direction * spawnRequest.LaunchSpeed;
             var angularVelocity = _randomService.Direction();

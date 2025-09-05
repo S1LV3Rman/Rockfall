@@ -13,14 +13,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         [SerializeField] private LayerMask layerMask = 0;
 
         private int _pointsCount;
-        private Vector3 _endPoint;
         public bool Hitting { get; private set; } = false;
+        public Vector3 EndPoint { get; private set; }
         public GameObject HittedObject { get; private set; }
         public float MaxLength => maxLength;
 
         void Start()
         {
-            _endPoint = transform.TransformPoint(0f, 0f, maxLength);
+            EndPoint = transform.TransformPoint(0f, 0f, maxLength);
         }
 
         void FixedUpdate()
@@ -36,12 +36,12 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             
             if (Hitting)
             {
-                _endPoint = hit.point;
+                EndPoint = hit.point;
                 HittedObject = hit.collider.gameObject;
             }
             else
             {
-                _endPoint = transform.TransformPoint(0f, 0f, maxLength);
+                EndPoint = transform.TransformPoint(0f, 0f, maxLength);
             }
         }
 
@@ -67,14 +67,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
                 lineRenderer.SetPosition(i, position);
             }
-            lineRenderer.SetPosition(_pointsCount - 1, _endPoint);
+            lineRenderer.SetPosition(_pointsCount - 1, EndPoint);
         }
 
         private void UpdateEndEffect()
         {
             if (Hitting)
             {
-                endEffect.transform.position = _endPoint;
+                endEffect.transform.position = EndPoint;
                 if (!endEffect.isPlaying)
                     endEffect.Play();
             }
@@ -87,7 +87,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         void UpdateLength()
         {
             var length = Hitting
-                ? Vector3.Distance(transform.position, _endPoint)
+                ? Vector3.Distance(transform.position, EndPoint)
                 : maxLength;
 
             _pointsCount = Mathf.CeilToInt(length) + 1;

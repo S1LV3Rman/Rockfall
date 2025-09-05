@@ -12,6 +12,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private bool _isFiring = false;
         private float _nextFireTime;
 
+        public override DamageType Type => DamageType.Kinetic;
         public override float ProjectileSpeed => shotPrefab.Speed;
         public override float MaxFireDistance => shotPrefab.Speed * shotPrefab.Lifetime;
 

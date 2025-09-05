@@ -4,10 +4,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class SpaceStation : AliveTrackedMonoBehaviour, IReusableInPool
     {
-        [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public Color IndicatorColor { get; private set; }
-        [field: SerializeField] public Color IndicatorHealthColor { get; private set; }
-        [field: SerializeField] public float IndicatorSize { get; private set; } = 2f;
+        [field: SerializeField] public Health Health { get; private set; }
+        [field: SerializeField] public IndicatorTarget Indicator { get; private set; }
         public void PrepareForPulling()
         {
             gameObject.SetActive(true);

@@ -53,9 +53,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
                 var aimPoint = weapon.AimPoint;
                 _indicatorsFactory.CreateIndicator()
                     .WithTargetFollowing(aimPoint)
-                    .WithCustomSprite(aimPoint.IndicatorImage)
-                    .Colored(aimPoint.IndicatorColor)
-                    .OfSize(aimPoint.IndicatorSize);
+                    .WithCustomSprite(aimPoint.Indicator.Image)
+                    .Colored(aimPoint.Indicator.Color)
+                    .OfSize(aimPoint.Indicator.Size);
             }
 
             _pool.Add(ship);

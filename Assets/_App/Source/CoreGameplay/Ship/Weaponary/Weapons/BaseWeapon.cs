@@ -2,9 +2,13 @@
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public abstract class BaseWeapon : MonoBehaviour
+    public abstract class BaseWeapon : MonoBehaviour, IDamageDealer
     {
         [field: SerializeField] public AimPoint AimPoint { get; private set; }
+        public IInstigator Source { get; }
+        public int Damage { get; }
+        public int TeamId { get; }
+        public abstract DamageType Type { get; }
         public abstract float MaxFireDistance { get; }
         public abstract float ProjectileSpeed { get; }
         public float DistanceToAimTarget { get; set; }

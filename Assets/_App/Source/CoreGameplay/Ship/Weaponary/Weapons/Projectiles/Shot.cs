@@ -2,17 +2,10 @@
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class Shot : MonoBehaviour
+    public class Shot : DamageOnCollide
     {
         [SerializeField] private float speed = 100.0f;
         [SerializeField] private float lifetime = 5.0f;
-        [SerializeField] private DamageOnCollide _damageOnCollide;
-
-        public int Damage
-        {
-            get => _damageOnCollide.Damage;
-            set => _damageOnCollide.Damage = value;
-        }
 
         public float Speed => speed;
         public float Lifetime => lifetime;

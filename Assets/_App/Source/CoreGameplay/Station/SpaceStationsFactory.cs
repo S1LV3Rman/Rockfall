@@ -40,10 +40,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             
             _indicatorsFactory.CreateIndicator()
                 .WithTargetFollowing(station)
-                .WithHealth(station, station.IndicatorHealthColor)
-                .WithName(station.Name)
-                .Colored(station.IndicatorColor)
-                .OfSize(station.IndicatorSize);
+                .WithHealth(station, station.Indicator.HealthColor)
+                .WithName(station.Indicator.Name)
+                .Colored(station.Indicator.Color)
+                .OfSize(station.Indicator.Size);
             
             return station;
         }

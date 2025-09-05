@@ -5,7 +5,7 @@ using UnityEngine;
 namespace S1LV3Rman.RockFall.Editor
 {
     [CustomPropertyDrawer(typeof(OnFieldChangedAttribute))]
-    public class OnFieldChangedAttributePropertyDrawer : PropertyDrawer
+    public class OnFieldChangedDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

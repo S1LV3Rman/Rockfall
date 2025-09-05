@@ -8,9 +8,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         [SerializeField] private Image _healthBar;
         
-        private DamageTaking _target;
+        private Health _target;
 
-        public void SetTarget(DamageTaking target)
+        public void SetTarget(Health target)
         {
             _target = target;
         }
@@ -41,8 +41,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         private void UpdateHealth()
         {
-            _healthBar.fillAmount = _target.MaxHealth > 0
-                ? (float) _target.CurrentHealth / _target.MaxHealth
+            _healthBar.fillAmount = _target.Max > 0
+                ? (float) _target.Current.CurrentValue / _target.Max
                 : 0f;
         }
 

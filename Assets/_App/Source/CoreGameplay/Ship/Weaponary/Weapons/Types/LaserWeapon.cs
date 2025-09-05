@@ -13,6 +13,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         private bool _isFiring = false;
         private LaserBeam _currentLaserBeam;
 
+        public override DamageType Type => DamageType.Laser;
         public override float MaxFireDistance => _beamPrefab.MaxLength;
         public override float ProjectileSpeed => float.MaxValue;
 
@@ -37,11 +38,14 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             {
                 if (_currentLaserBeam.Hitting)
                 {
-                    // Нанести повреждение объекту, в который попал лазер,
-                    // если возможно.
-                    var theirDamage = _currentLaserBeam.HittedObject.GetComponentInParent<DamageTaking>();
-                    if (theirDamage) 
-                        theirDamage.TakeDamage(_damage);
+                    // Нанести повреждение объекту, в который попал лазер, если возможно
+                    var target = _currentLaserBeam.HittedObject.GetComponentInParent<IDamageable>();
+                    if (target != null)
+                    {
+                        var context = new DamageContext(
+                            Source, this, _currentLaserBeam.EndPoint, Damage, Type, teamId: TeamId);
+                        target.Receive(context);
+                    }
                 }
 
                 // Ждать damageInterval секунд перед
