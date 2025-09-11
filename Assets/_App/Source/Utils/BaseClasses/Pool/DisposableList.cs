@@ -8,8 +8,8 @@ namespace S1LV3Rman.RockFall
 {
     public class DisposableList<T> : IList<T>, IDisposable where T : IDisposable
     {
-        private readonly List<T> _items = new();
-        private bool _isDisposed;
+        protected readonly List<T> _items = new();
+        protected bool _isDisposed;
 
         private readonly Subject<T> _onAdded = new();
         private readonly Subject<T> _onRemoved = new();

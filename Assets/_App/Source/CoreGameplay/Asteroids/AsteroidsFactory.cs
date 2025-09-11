@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public sealed class AsteroidsFactory : BaseFactory
+    public sealed class AsteroidsFactory : Factory
     {
         private readonly AsteroidsPool _pool;
         private readonly AsteroidsConfig _config;
@@ -39,21 +39,22 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public Asteroid CreateAsteroid(AsteroidSpawnRequest spawnRequest)
         {
-            var asteroidPrefab = _config.BasicAsteroid;
-            var asteroid = Container.Instantiate(asteroidPrefab, 
+            var asteroidData = _config.BasicAsteroid;
+            var asteroid = Container.Instantiate(asteroidData.Prefab, 
                 spawnRequest.Position, Quaternion.LookRotation(spawnRequest.Direction), _world);
+            asteroid.SetStats(asteroidData);
             
             var station = _stationsPool.First();
             _indicatorsFactory.CreateIndicator()
                 .WithTargetFollowing(asteroid)
-                .WithHealth(asteroid, asteroid.Indicator.HealthColor)
+                .WithHealth(asteroid, _config.Indicator.HealthColor)
                 .WithDistance(asteroid, station)
-                .WithName(asteroid.Indicator.Name)
-                .Colored(asteroid.Indicator.Color)
-                .OfSize(asteroid.Indicator.Size);
+                .WithName(_config.Indicator.Name)
+                .Colored(_config.Indicator.Color)
+                .OfSize(_config.Indicator.Size);
 
-            var velocity = spawnRequest.Direction * spawnRequest.LaunchSpeed;
-            var angularVelocity = _randomService.Direction();
+            var velocity = spawnRequest.Direction * asteroidData.Speed;
+            var angularVelocity = _randomService.Direction() * asteroidData.Speed;
             asteroid.Launch(velocity, angularVelocity);
             
             _pool.Add(asteroid);

@@ -1,6 +1,6 @@
 namespace S1LV3Rman.RockFall
 {
-    public class DefaultUIPanel : BaseUIPanel
+    public class DefaultUIPanel : UIPanel
     {
         protected override void OnOpen()
         {

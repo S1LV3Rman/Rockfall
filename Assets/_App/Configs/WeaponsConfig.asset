@@ -15,8 +15,32 @@ MonoBehaviour:
   <Weapons>k__BackingField:
     _items:
     - <Key>k__BackingField: 1
-      <Value>k__BackingField: {fileID: 3519254570807320048, guid: 0bf8638252f955241ab6faf9d3b6069f,
-        type: 3}
+      <Value>k__BackingField:
+        Prefab: {fileID: 7628269587689954788, guid: e664710f6dc450d40a6c48acf22ce52c,
+          type: 3}
+        DamageType: 0
+        Damage: 1
+        FireRate: 20
+        Cooldown: 0.05
+        ProjectileSpeed: 0
+        ProjectileLifetime: 0
+        MaxFireDistance: 500
+        MuzzleFlashPrefab: {fileID: 0}
+        ProjectilePrefab: {fileID: 0}
+        LaserPrefab: {fileID: 0}
+        FireSound: {fileID: 0}
     - <Key>k__BackingField: 2
-      <Value>k__BackingField: {fileID: 7628269587689954788, guid: e664710f6dc450d40a6c48acf22ce52c,
-        type: 3}
+      <Value>k__BackingField:
+        Prefab: {fileID: 3519254570807320048, guid: 0bf8638252f955241ab6faf9d3b6069f,
+          type: 3}
+        DamageType: 0
+        Damage: 10
+        FireRate: 2
+        Cooldown: 0.5
+        ProjectileSpeed: 100
+        ProjectileLifetime: 5
+        MaxFireDistance: 0
+        MuzzleFlashPrefab: {fileID: 0}
+        ProjectilePrefab: {fileID: 0}
+        LaserPrefab: {fileID: 0}
+        FireSound: {fileID: 0}

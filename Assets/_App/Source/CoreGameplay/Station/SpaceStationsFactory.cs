@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class SpaceStationsFactory : BaseFactory
+    public class SpaceStationsFactory : Factory
     {
         private readonly SpaceStationsPool _pool;
         private readonly SpaceStationsConfig _config;
@@ -40,10 +40,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             
             _indicatorsFactory.CreateIndicator()
                 .WithTargetFollowing(station)
-                .WithHealth(station, station.Indicator.HealthColor)
-                .WithName(station.Indicator.Name)
-                .Colored(station.Indicator.Color)
-                .OfSize(station.Indicator.Size);
+                .WithHealth(station, _config.Indicator.HealthColor)
+                .WithName(_config.Indicator.Name)
+                .Colored(_config.Indicator.Color)
+                .OfSize(_config.Indicator.Size);
             
             return station;
         }

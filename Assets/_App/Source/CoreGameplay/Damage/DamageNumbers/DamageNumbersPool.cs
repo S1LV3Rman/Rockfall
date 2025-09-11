@@ -28,6 +28,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public override void Dispose()
         {
+            if (_isDisposed)
+                return;
+            
             foreach (var sub in _subscriptions.Values)
                 sub.Dispose();
 

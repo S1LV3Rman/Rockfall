@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class SpaceShipsFactory : BaseFactory
+    public class SpaceShipsFactory : Factory
     {
         private readonly SpaceShipsConfig _shipsConfig;
         private readonly SpaceShipsPool _pool;
@@ -41,21 +41,22 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             var ship = Container.Instantiate(
                 _shipsConfig.BasicShip, _startingPoint.position, _startingPoint.rotation, _world);
 
-            if (!_weaponsConfig.Weapons.TryGetValue(weaponType, out var weaponPrefab))
+            if (!_weaponsConfig.Weapons.TryGetValue(weaponType, out var weaponData))
                 throw new KeyNotFoundException(
                     $"Weapon type '{weaponType}' not found in weapons config.");
 
             foreach (var weaponSlot in ship.Weaponry.WeaponSlots)
             {
-                var weapon = Container.Instantiate(weaponPrefab, weaponSlot);
+                var weapon = Container.Instantiate(weaponData.Prefab, weaponSlot);
+                weapon.SetStats(weaponData);
                 ship.Weaponry.EquipWeapon(weapon);
                 
                 var aimPoint = weapon.AimPoint;
                 _indicatorsFactory.CreateIndicator()
                     .WithTargetFollowing(aimPoint)
-                    .WithCustomSprite(aimPoint.Indicator.Image)
-                    .Colored(aimPoint.Indicator.Color)
-                    .OfSize(aimPoint.Indicator.Size);
+                    .WithCustomSprite(_shipsConfig.AimIndicator.Image)
+                    .Colored(_shipsConfig.AimIndicator.Color)
+                    .OfSize(_shipsConfig.AimIndicator.Size);
             }
 
             _pool.Add(ship);

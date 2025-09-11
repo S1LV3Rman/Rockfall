@@ -6,6 +6,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         order = 0)]
     public class SpaceStationsConfig : ScriptableObject
     {
+        [field: SerializeField] public IndicatorData Indicator { get; private set; }
         [field: SerializeField] public SpaceStation BasicStation { get; private set; }
     }
 }

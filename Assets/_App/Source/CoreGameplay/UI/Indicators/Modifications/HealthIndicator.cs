@@ -8,11 +8,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         [SerializeField] private Image _healthBar;
         
-        private Health _target;
+        private Health _health;
 
-        public void SetTarget(Health target)
+        public void SetTarget(Health health)
         {
-            _target = target;
+            _health = health;
         }
 
         public void SetColor(Color color)
@@ -33,7 +33,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             if (!isActiveAndEnabled)
                 return;
 
-            if (_target == null)
+            if (_health == null)
                 return;
             
             UpdateHealth();
@@ -41,8 +41,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         private void UpdateHealth()
         {
-            _healthBar.fillAmount = _target.Max > 0
-                ? (float) _target.Current.CurrentValue / _target.Max
+            _healthBar.fillAmount = _health.MaxHealth > 0
+                ? (float) _health.CurrentHealth.CurrentValue / _health.MaxHealth
                 : 0f;
         }
 

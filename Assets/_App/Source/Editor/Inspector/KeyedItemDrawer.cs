@@ -15,15 +15,26 @@ namespace S1LV3Rman.RockFall.Editor
 
             if (!nested) 
                 position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-            position.width *= 0.5f;
-            position.width -= 2f;
 
             var keyProp = property.FindPropertyRelative("<Key>k__BackingField");
             var valueProp = property.FindPropertyRelative("<Value>k__BackingField");
 
-            keyProp.DrawWithoutLabel(ref position, GUIFlow.Horizontal);
-            position.x += 4f;
-            valueProp.DrawWithoutLabel(ref position);
+            var isComplex = valueProp.hasVisibleChildren;
+
+            if (isComplex)
+            {
+                keyProp.DrawWithoutLabel(ref position);
+                valueProp.DrawWithFoldout(ref position, preferredLabel);
+            }
+            else
+            {
+                position.width *= 0.5f;
+                position.width -= 2f;
+                keyProp.DrawWithoutLabel(ref position, GUIFlow.Horizontal);
+                
+                position.x += 4f;
+                valueProp.DrawWithoutLabel(ref position);
+            }
 
             if (EditorGUI.EndChangeCheck())
                 property.serializedObject.ApplyModifiedProperties();
@@ -32,7 +43,23 @@ namespace S1LV3Rman.RockFall.Editor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight;
+            var valueProp = property.FindPropertyRelative("<Value>k__BackingField");
+            var isComplex = valueProp.hasVisibleChildren;
+
+            var height = GUISizes.LineWithSpacing;
+            if (isComplex)
+            {
+                if (valueProp.isExpanded)
+                    height += GUISizes.LineWithSpacing + EditorGUI.GetPropertyHeight(valueProp, GUIContent.none);
+                else
+                    height += GUISizes.SingleLine;
+            }
+            else
+            {
+                height += GUISizes.SingleLine;
+            }
+
+            return height;
         }
     }
 

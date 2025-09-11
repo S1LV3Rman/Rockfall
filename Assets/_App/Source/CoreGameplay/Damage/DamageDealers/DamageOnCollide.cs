@@ -4,21 +4,30 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class DamageOnCollide : MonoBehaviour, IDamageDealer
     {
-        [field: SerializeField] public IInstigator Source { get; set; }
-        [field: SerializeField] public int Damage { get; set; }
-        [field: SerializeField] public DamageType Type { get; set; }
-        [field: SerializeField] public int TeamId { get; set; }
+        [field: SerializeField] public IInstigator Source { get; protected set; }
+        [field: SerializeField] public int BaseDamage { get; protected set; }
+        [field: SerializeField] public DamageType DamageType { get; protected set; }
+
         [SerializeField] private bool _selfDestroy;
+        
+        public DamageModifier Modifier { get; }
+
+        public void SetupDamage(IInstigator source, int damage, DamageType damageType)
+        {
+            Source = source;
+            BaseDamage = damage;
+            DamageType = damageType;
+        }
 
         private void TryHit(GameObject other, Vector3 at)
         {
-            // Prefer hitbox → owner
             var hitbox = other.GetComponent<DamageableHitbox>();
             if (hitbox == null)
                 return;
 
-            var damageContext = new DamageContext(Source, this, at, Damage, Type, teamId: TeamId);
-            hitbox.Owner.Receive(damageContext);
+            var damageContext = new DamageContext(Source, this, hitbox.Owner, at,
+                BaseDamage, DamageType, teamId: Source.TeamId);
+            hitbox.Owner.ReceiveDamage(damageContext);
 
             if (_selfDestroy)
                 Destroy(gameObject);

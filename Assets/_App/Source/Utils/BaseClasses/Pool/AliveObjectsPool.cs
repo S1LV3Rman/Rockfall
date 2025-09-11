@@ -5,7 +5,7 @@ using R3;
 namespace S1LV3Rman.RockFall
 {
     // todo: не уверен, что хочу полагаться на реактивщину для удаления объектов из пулла. Может лучше убирать их вручную
-    public abstract class AliveObjectsPool<T> : BasePool<T> where T : IAliveTrackedObject, IReusableInPool, IDisposable
+    public abstract class AliveObjectsPool<T> : Pool<T> where T : IAliveTrackedObject, IReusableInPool, IDisposable
     {
         private readonly Dictionary<T, IDisposable> _subscriptions = new();
 
@@ -34,6 +34,9 @@ namespace S1LV3Rman.RockFall
 
         public override void Dispose()
         {
+            if (_isDisposed)
+                return;
+
             foreach (var sub in _subscriptions.Values)
                 sub.Dispose();
 

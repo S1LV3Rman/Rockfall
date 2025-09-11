@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public sealed class IndicatorsFactory : BaseFactory
+    public sealed class IndicatorsFactory : Factory
     {
         private readonly RectTransform _uiContainer;
         private readonly GameplayCamera _gameplayCamera;

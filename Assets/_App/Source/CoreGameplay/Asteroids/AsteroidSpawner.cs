@@ -7,13 +7,11 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     {
         public readonly Vector3 Position;
         public readonly Vector3 Direction; // normalized
-        public readonly float LaunchSpeed;
 
-        public AsteroidSpawnRequest(in Vector3 position, in Vector3 direction, float launchSpeed)
+        public AsteroidSpawnRequest(in Vector3 position, in Vector3 direction)
         {
             Position = position;
             Direction = direction;
-            LaunchSpeed = launchSpeed;
         }
     }
 
@@ -23,7 +21,6 @@ namespace S1LV3Rman.RockFall.CoreGameplay
         [SerializeField] private float _height = 50f;
         [SerializeField] private float _spawnDelay = 5f;
         [SerializeField] private float _spawnDeviation = 1f;
-        [SerializeField] private float _asteroidSpeed = 10f;
 
         private Transform _target;
         private bool _isActive;
@@ -66,7 +63,7 @@ namespace S1LV3Rman.RockFall.CoreGameplay
                 direction = transform.forward;
             direction.Normalize();
 
-            return new AsteroidSpawnRequest(position, direction, _asteroidSpeed);
+            return new AsteroidSpawnRequest(position, direction);
         }
 
         /// <summary>

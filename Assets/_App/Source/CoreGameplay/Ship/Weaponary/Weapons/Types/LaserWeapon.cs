@@ -1,71 +1,74 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public class LaserWeapon : BaseWeapon
     {
-        [SerializeField] private float _damageInterval = 0.1f;
-        [SerializeField] private int _damage = 1;
+        [SerializeField] private float _damageInterval;
+        [SerializeField] private int _baseDamage;
+        [SerializeField] private float _fireDistance;
+
+        [SerializeField] private GameObject _muzzleFlashPrefab;
         [SerializeField] private LaserBeam _beamPrefab;
         [SerializeField] private AudioSource _fireSound;
 
-        private bool _isFiring = false;
-        private LaserBeam _currentLaserBeam;
+        private bool _isFiring;
+        private LaserBeam _activeBeam;
+        private float _nextHitTime = float.MinValue;
 
-        public override DamageType Type => DamageType.Laser;
-        public override float MaxFireDistance => _beamPrefab.MaxLength;
+        public override DamageType DamageType => DamageType.Laser;
+        public override float MaxFireDistance => _fireDistance;
         public override float ProjectileSpeed => float.MaxValue;
+
+        public override void SetStats(WeaponData weaponData)
+        {
+            if (weaponData.DamageType != DamageType)
+                throw new ArgumentException(
+                    $"Stats for {weaponData.DamageType} weapon can't be set to {DamageType} weapon");
+
+            _baseDamage = weaponData.Damage;
+            _damageInterval = weaponData.Cooldown;
+            _fireDistance = weaponData.MaxFireDistance;
+
+            _muzzleFlashPrefab = weaponData.MuzzleFlashPrefab;
+            _beamPrefab = weaponData.LaserPrefab;
+            _fireSound.clip = weaponData.FireSound;
+        }
 
         public override void StartFiring()
         {
-            StartCoroutine(Firing());
+            if (_activeBeam == null)
+            {
+                _activeBeam = Instantiate(_beamPrefab, transform);
+                _activeBeam.Setup(Owner, () => _baseDamage, _fireDistance);
+
+                if (_fireSound != null)
+                    _fireSound.Play();
+            }
+
+            _isFiring = true;
         }
 
         public override void StopFiring()
         {
             _isFiring = false;
-        }
-
-        private IEnumerator Firing()
-        {
-            _isFiring = true;
-
-            Fire();
-
-            // Продолжать итерации, пока isFiring равна true
-            while (_isFiring)
-            {
-                if (_currentLaserBeam.Hitting)
-                {
-                    // Нанести повреждение объекту, в который попал лазер, если возможно
-                    var target = _currentLaserBeam.HittedObject.GetComponentInParent<IDamageable>();
-                    if (target != null)
-                    {
-                        var context = new DamageContext(
-                            Source, this, _currentLaserBeam.EndPoint, Damage, Type, teamId: TeamId);
-                        target.Receive(context);
-                    }
-                }
-
-                // Ждать damageInterval секунд перед
-                // следующим нанесением урона
-                yield return new WaitForSeconds(_damageInterval);
-            }
-
-            Destroy(_currentLaserBeam.gameObject);
-            _currentLaserBeam = null;
-        }
-
-        // Создаёт лазерные лучи
-        private void Fire()
-        {
-            _currentLaserBeam = Instantiate(_beamPrefab, transform);
-
-            // Если пушка имеет компонент источника звука,
-            // воспроизвести звуковой эффект
+            Destroy(_activeBeam.gameObject);
+            _activeBeam = null;
             if (_fireSound != null)
-                _fireSound.Play();
+                _fireSound.Stop();
+        }
+
+        private void FixedUpdate()
+        {
+            if (!_isFiring || !_activeBeam.Hitting)
+                return;
+            
+            if (_nextHitTime > Time.time)
+                return;
+
+            if (_activeBeam.TryDealDamage())
+                _nextHitTime = Time.time + _damageInterval;
         }
     }
 }

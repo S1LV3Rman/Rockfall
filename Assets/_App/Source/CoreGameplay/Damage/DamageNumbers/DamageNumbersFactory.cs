@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public sealed class DamageNumbersFactory : BaseFactory
+    public sealed class DamageNumbersFactory : Factory
     {
         private readonly DamageNumbersConfig _config;
         private readonly DamageNumbersPool _pool;

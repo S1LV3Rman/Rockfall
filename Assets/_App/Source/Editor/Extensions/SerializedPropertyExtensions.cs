@@ -52,26 +52,32 @@ namespace S1LV3Rman.RockFall
             string label = null,
             string tooltip = null,
             GUIFlow flow = GUIFlow.Vertical,
-            bool indent = false)
+            bool indent = false,
+            bool isReadonly = false)
         {
-            property.Draw(ref position, new GUIContent(label ?? property.displayName, tooltip), flow, indent);
+            property.Draw(ref position,
+                new GUIContent(label ?? property.displayName, tooltip), flow, indent, isReadonly);
         }
 
         public static void Draw(this SerializedProperty property,
             ref Rect position,
-            GUIContent label = null,
+            GUIContent content,
             GUIFlow flow = GUIFlow.Vertical,
-            bool indent = false)
+            bool indent = false,
+            bool isReadonly = false)
         {
-            var content = label ?? GUIContent.none;
+            content ??= GUIContent.none;
             position.height = EditorGUI.GetPropertyHeight(property, content);
 
             if (indent) EditorGUI.indentLevel++;
+            var guiEnabled = GUI.enabled;
+            if (isReadonly) GUI.enabled = false;
             EditorGUI.PropertyField(position, property, content);
+            if (isReadonly) GUI.enabled = guiEnabled;
             if (indent) EditorGUI.indentLevel--;
 
             if (flow == GUIFlow.Vertical)
-                position.y += position.height;
+                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
             else
                 position.x += position.width;
         }
@@ -126,7 +132,7 @@ namespace S1LV3Rman.RockFall
             }
 
             if (flow == GUIFlow.Vertical)
-                position.y += position.height;
+                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
             else
                 position.x += position.width;
             return property.isExpanded;
@@ -154,7 +160,7 @@ namespace S1LV3Rman.RockFall
             if (indent) EditorGUI.indentLevel--;
 
             if (flow == GUIFlow.Vertical)
-                position.y += position.height;
+                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
             else
                 position.x += position.width;
         }
