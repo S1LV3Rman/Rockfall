@@ -10,6 +10,7 @@ namespace S1LV3Rman.RockFall
 {
     public enum GUIFlow
     {
+        None,
         Horizontal,
         Vertical
     }
@@ -46,6 +47,35 @@ namespace S1LV3Rman.RockFall
         public static bool IsInsideOfArray(this SerializedProperty property) =>
             Regex.IsMatch(property.propertyPath, @"\.Array\.data\[\d+\]$");
 
+        private static Rect MoveWithFlow(Rect position, GUIFlow flow)
+        {
+            switch (flow)
+            {
+                case GUIFlow.None:
+                    break;
+                case GUIFlow.Horizontal:
+                    position.x += position.width + GUISizes.HSpacing;
+                    break;
+                case GUIFlow.Vertical:
+                    position.y += position.height + GUISizes.VSpacing;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(flow), flow, null);
+            }
+
+            return position;
+        }
+
+        #region Positioned
+
+        public static void DrawWithoutLabel(this SerializedProperty property,
+            ref Rect position,
+            GUIFlow flow = GUIFlow.Vertical,
+            bool indent = false,
+            bool isReadonly = false)
+        {
+            property.Draw(ref position, GUIContent.none, flow, indent, isReadonly);
+        }
 
         public static void Draw(this SerializedProperty property,
             ref Rect position,
@@ -72,104 +102,110 @@ namespace S1LV3Rman.RockFall
             if (indent) EditorGUI.indentLevel++;
             var guiEnabled = GUI.enabled;
             if (isReadonly) GUI.enabled = false;
+
             EditorGUI.PropertyField(position, property, content);
+
             if (isReadonly) GUI.enabled = guiEnabled;
             if (indent) EditorGUI.indentLevel--;
 
-            if (flow == GUIFlow.Vertical)
-                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
-            else
-                position.x += position.width;
+            position = MoveWithFlow(position, flow);
         }
 
         public static bool DrawWithFoldout(this SerializedProperty property,
             ref Rect position,
             string label = null,
             string tooltip = null,
-            GUIFlow flow = GUIFlow.Vertical)
+            GUIFlow flow = GUIFlow.Vertical,
+            bool isReadonly = false)
+        {
+            return property.DrawWithFoldout(ref position,
+                new GUIContent(label ?? property.displayName, tooltip), flow, isReadonly);
+        }
+
+        public static bool DrawWithFoldout(this SerializedProperty property,
+            ref Rect position,
+            GUIContent content,
+            GUIFlow flow = GUIFlow.Vertical,
+            bool isReadonly = false)
         {
             var isComplex = property.hasVisibleChildren;
             var isExpanded = property.isExpanded;
-            var labelContent = new GUIContent(label ?? property.displayName, tooltip);
 
             // Adjust height based on whether child fields are shown
             position.height = isComplex && isExpanded
-                ? EditorGUIUtility.singleLineHeight + EditorGUI.GetPropertyHeight(property, GUIContent.none)
-                : EditorGUIUtility.singleLineHeight;
+                ? GUISizes.LineWithSpacing + EditorGUI.GetPropertyHeight(property, GUIContent.none)
+                : GUISizes.SingleLine;
 
             if (isComplex && !isExpanded)
             {
                 property.isExpanded = EditorGUI.Foldout(position,
-                    false, labelContent, true, EditorStyles.foldoutHeader);
+                    false, content, content != GUIContent.none, EditorStyles.foldoutHeader);
             }
             else
             {
-                var foldoutWidth = EditorGUIUtility.labelWidth + 2f;
-
                 var foldoutPosition = position;
                 var propertyPosition = position;
 
                 if (isComplex)
                 {
-                    foldoutPosition.height = EditorGUIUtility.singleLineHeight;
-                    propertyPosition.y += EditorGUIUtility.singleLineHeight;
-                    propertyPosition.height -= EditorGUIUtility.singleLineHeight;
+                    foldoutPosition.height = GUISizes.SingleLine;
+                    propertyPosition.y += GUISizes.LineWithSpacing;
+                    propertyPosition.height -= GUISizes.LineWithSpacing;
                 }
                 else
                 {
-                    foldoutPosition.width = foldoutWidth;
-                    propertyPosition.x += foldoutWidth;
-                    propertyPosition.width -= foldoutWidth;
+                    foldoutPosition.width = GUISizes.LabelWidth;
+                    propertyPosition.x += GUISizes.LabelWidth + GUISizes.HSpacing;
+                    propertyPosition.width -= GUISizes.LabelWidth + GUISizes.HSpacing;
                 }
 
                 property.isExpanded = EditorGUI.Foldout(foldoutPosition,
-                    isExpanded, labelContent, true, EditorStyles.foldoutHeader);
+                    isExpanded, content, content != GUIContent.none, EditorStyles.foldoutHeader);
 
-                var indent = EditorGUI.indentLevel;
-                EditorGUI.indentLevel = isComplex ? indent + 1 : 0;
-                EditorGUI.PropertyField(propertyPosition, property, GUIContent.none);
-                EditorGUI.indentLevel = indent;
+                property.DrawWithoutLabel(ref propertyPosition, flow, isComplex, isReadonly);
             }
 
-            if (flow == GUIFlow.Vertical)
-                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
-            else
-                position.x += position.width;
+            position = MoveWithFlow(position, flow);
             return property.isExpanded;
+        }
+
+        #endregion
+
+        #region Layouted
+
+        public static void DrawWithoutLabel(this SerializedProperty property,
+            bool indent = false,
+            bool isReadonly = false)
+        {
+            property.Draw(GUIContent.none, indent, isReadonly);
         }
 
         public static void Draw(this SerializedProperty property,
             string label = null,
             string tooltip = null,
-            bool indent = false)
+            bool indent = false,
+            bool isReadonly = false)
         {
+            property.Draw(new GUIContent(label ?? property.displayName, tooltip), indent, isReadonly);
+        }
+
+        public static void Draw(this SerializedProperty property,
+            GUIContent content,
+            bool indent = false,
+            bool isReadonly = false)
+        {
+            content ??= GUIContent.none;
+
             if (indent) EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(property, new GUIContent(label ?? property.displayName, tooltip));
+            var guiEnabled = GUI.enabled;
+            if (isReadonly) GUI.enabled = false;
+
+            EditorGUILayout.PropertyField(property, content, true);
+
+            if (isReadonly) GUI.enabled = guiEnabled;
             if (indent) EditorGUI.indentLevel--;
         }
 
-        public static void DrawWithoutLabel(this SerializedProperty property,
-            ref Rect position,
-            GUIFlow flow = GUIFlow.Vertical,
-            bool indent = false)
-        {
-            position.height = EditorGUI.GetPropertyHeight(property, GUIContent.none);
-
-            if (indent) EditorGUI.indentLevel++;
-            EditorGUI.PropertyField(position, property, GUIContent.none);
-            if (indent) EditorGUI.indentLevel--;
-
-            if (flow == GUIFlow.Vertical)
-                position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
-            else
-                position.x += position.width;
-        }
-
-        public static void DrawWithoutLabel(this SerializedProperty property, bool indent = false)
-        {
-            if (indent) EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(property, GUIContent.none);
-            if (indent) EditorGUI.indentLevel--;
-        }
+        #endregion
     }
 }

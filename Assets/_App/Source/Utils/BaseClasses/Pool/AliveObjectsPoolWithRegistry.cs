@@ -6,25 +6,24 @@ namespace S1LV3Rman.RockFall
     public abstract class AliveObjectsPoolWithRegistry<T> : AliveObjectsPool<T> 
         where T : IAliveTrackedObject, IReusableInPool, IDisposable
     {
-        private readonly InstanceRegistry<IDamageableProvider> _damageables;
+        public readonly InstanceRegistry<T> ActiveObjects;
 
-        protected AliveObjectsPoolWithRegistry(
-            InstanceRegistry<IDamageableProvider> damageables)
+        protected AliveObjectsPoolWithRegistry()
         {
-            _damageables = damageables;
+            ActiveObjects = new InstanceRegistry<T>();
         }
 
         public override void Add(T item)
         {
             base.Add(item);
-            _damageables.TryRegister(item);
+            ActiveObjects.TryRegister(item);
         }
 
         public override bool Remove(T item)
         {
             var wasRemoved = base.Remove(item);
             if (wasRemoved)
-                _damageables.TryUnregister(item);
+                ActiveObjects.TryUnregister(item);
 
             return wasRemoved;
         }
@@ -33,7 +32,7 @@ namespace S1LV3Rman.RockFall
         {
             var wasPulled = base.TryPull(out item);
             if (wasPulled)
-                _damageables.TryRegister(item);
+                ActiveObjects.TryRegister(item);
 
             return wasPulled;
         }
@@ -41,13 +40,14 @@ namespace S1LV3Rman.RockFall
         public override void Release(T item)
         {
             base.Release(item);
-            _damageables.TryUnregister(item);
+            ActiveObjects.TryUnregister(item);
         }
 
         public override void Dispose()
         {
             foreach (var item in _items) 
-                _damageables.TryUnregister(item);
+                ActiveObjects.TryUnregister(item);
+            ActiveObjects.Dispose();
             base.Dispose();
         }
     }

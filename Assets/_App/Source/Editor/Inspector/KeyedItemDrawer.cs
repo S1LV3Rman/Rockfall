@@ -4,18 +4,10 @@ using UnityEngine;
 namespace S1LV3Rman.RockFall.Editor
 {
     [CustomPropertyDrawer(typeof(KeyedItem<,>), true)]
-    public class KeyedItemDrawer : PropertyDrawer
+    public class KeyedItemDrawer : PropertyDrawerLabeledOnLeft
     {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void Draw(Rect position, SerializedProperty property)
         {
-            EditorGUI.BeginProperty(position, label, property);
-            EditorGUI.BeginChangeCheck();
-
-            var nested = property.IsInsideOfArray() || label == GUIContent.none;
-
-            if (!nested) 
-                position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
             var keyProp = property.FindPropertyRelative("<Key>k__BackingField");
             var valueProp = property.FindPropertyRelative("<Value>k__BackingField");
 
@@ -23,22 +15,15 @@ namespace S1LV3Rman.RockFall.Editor
 
             if (isComplex)
             {
+                valueProp.DrawWithFoldout(ref position, GUIContent.none, GUIFlow.None);
                 keyProp.DrawWithoutLabel(ref position);
-                valueProp.DrawWithFoldout(ref position, preferredLabel);
             }
             else
             {
-                position.width *= 0.5f;
-                position.width -= 2f;
+                position.width = (position.width - GUISizes.HSpacing) * 0.5f;
                 keyProp.DrawWithoutLabel(ref position, GUIFlow.Horizontal);
-                
-                position.x += 4f;
                 valueProp.DrawWithoutLabel(ref position);
             }
-
-            if (EditorGUI.EndChangeCheck())
-                property.serializedObject.ApplyModifiedProperties();
-            EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -46,21 +31,10 @@ namespace S1LV3Rman.RockFall.Editor
             var valueProp = property.FindPropertyRelative("<Value>k__BackingField");
             var isComplex = valueProp.hasVisibleChildren;
 
-            var height = GUISizes.LineWithSpacing;
-            if (isComplex)
-            {
-                if (valueProp.isExpanded)
-                    height += GUISizes.LineWithSpacing + EditorGUI.GetPropertyHeight(valueProp, GUIContent.none);
-                else
-                    height += GUISizes.SingleLine;
-            }
-            else
-            {
-                height += GUISizes.SingleLine;
-            }
+            if (!isComplex || !valueProp.isExpanded)
+                return GUISizes.SingleLine;
 
-            return height;
+            return EditorGUI.GetPropertyHeight(valueProp, GUIContent.none) + GUISizes.LineWithSpacing;
         }
     }
-
 }

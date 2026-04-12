@@ -42,7 +42,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
             builder.Register<SpaceStationsPool>(Lifetime.Singleton);
             builder.Register<SpaceStationsFactory>(Lifetime.Singleton);
 
-            builder.Register<InstanceRegistry<IDamageableProvider>>(Lifetime.Singleton);
+            builder.Register<InstanceRegistry<IDamageable>>(Lifetime.Singleton);
+            builder.Register<InstanceRegistry<IDamageDealer>>(Lifetime.Singleton);
             builder.Register<CurrentGameState>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<CoreGameplayLogic>();

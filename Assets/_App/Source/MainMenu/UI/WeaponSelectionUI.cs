@@ -10,13 +10,13 @@ namespace S1LV3Rman.RockFall.MainMenu
         [SerializeField] private Button _laserWeapon;
         [SerializeField] private Button _rapidWeapon;
 
-        public Observable<WeaponType> WeaponSelection { get; private set; }
+        public Observable<string> WeaponSelection { get; private set; }
 
         protected override void Awake()
         {
             WeaponSelection = Observable.Merge(
-                _laserWeapon.OnClickAsObservable().Select(_ => WeaponType.LaserBeam),
-                _rapidWeapon.OnClickAsObservable().Select(_ => WeaponType.RapidFire));
+                _laserWeapon.OnClickAsObservable().Select(_ => WeaponTypes.LaserWeapon),
+                _rapidWeapon.OnClickAsObservable().Select(_ => WeaponTypes.ProjectileWeapon));
         }
     }
 }

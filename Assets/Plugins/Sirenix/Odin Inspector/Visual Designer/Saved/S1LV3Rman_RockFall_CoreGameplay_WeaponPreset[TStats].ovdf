@@ -1,0 +1,7 @@
+OVDF v1.1
+S1LV3Rman.RockFall.CoreGameplay.WeaponPreset`1, S1LV3Rman.RockFall.Runtime
+
+# Stats
++ [Sirenix.OdinInspector.LabelWidthAttribute]
+	Width = 13
++ [Sirenix.OdinInspector.InlinePropertyAttribute]

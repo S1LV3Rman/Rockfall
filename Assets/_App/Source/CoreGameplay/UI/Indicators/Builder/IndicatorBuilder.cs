@@ -72,10 +72,10 @@ namespace S1LV3Rman.RockFall.CoreGameplay
                 throw new ArgumentException("Health sprite should be specified if main sprite was changed",
                     nameof(sprite));
 
-            var damageTaking = target.GetComponent<Health>();
+            var damageTaking = target.GetComponent<IDamageable>();
             if (damageTaking == null)
                 throw new InvalidOperationException(
-                    "Health indicator can't be added to target without " + nameof(Health));
+                    "Health indicator can't be added to target without " + nameof(IDamageable));
 
             var healthIndicator = _container.Instantiate(_config.HealthIndicatorPrefab, _indicator.transform);
             healthIndicator.SetTarget(damageTaking);

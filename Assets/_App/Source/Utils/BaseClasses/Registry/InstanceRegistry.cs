@@ -6,38 +6,48 @@ namespace S1LV3Rman.RockFall
 {
     public sealed class InstanceRegistry<T> : IDisposable
     {
-        private readonly List<T> _instances = new();
+        private readonly List<T> _registeredInstances = new();
+        public IReadOnlyList<T> All => _registeredInstances;
+        
         private readonly Subject<T> _onRegistered = new();
-
-        public IReadOnlyList<T> All => _instances;
         public Observable<T> OnRegistered => _onRegistered;
+        
+        private readonly Subject<T> _onUnregistered = new();
+        public Observable<T> OnUnregistered => _onUnregistered;
 
         public void Register(T instance)
         {
-            if (_instances.Contains(instance))
+            if (_registeredInstances.Contains(instance))
                 return;
 
-            _instances.Add(instance);
+            _registeredInstances.Add(instance);
             _onRegistered.OnNext(instance);
         }
 
-        public bool TryRegister<TType>(TType instance)
+        public bool TryRegister(T instance)
         {
-            if (instance is not T tInstance || _instances.Contains(tInstance))
+            if (_registeredInstances.Contains(instance))
                 return false;
 
-            _instances.Add(tInstance);
-            _onRegistered.OnNext(tInstance);
+            _registeredInstances.Add(instance);
+            _onRegistered.OnNext(instance);
             return true;
         }
 
         public void Unregister(T instance)
         {
-            _instances.Remove(instance);
+            if (_registeredInstances.Remove(instance))
+                _onUnregistered.OnNext(instance);
         }
 
-        public bool TryUnregister<TType>(TType instance) => 
-            instance is T tInstance && _instances.Remove(tInstance);
+        public bool TryUnregister(T instance)
+        {
+            if (!_registeredInstances.Remove(instance))
+                return false;
+            
+            _onUnregistered.OnNext(instance);
+            return true;
+        }
 
         public void Dispose()
         {

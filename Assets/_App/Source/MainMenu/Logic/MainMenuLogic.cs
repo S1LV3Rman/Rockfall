@@ -47,7 +47,7 @@ namespace S1LV3Rman.RockFall.MainMenu
             _weaponSelectionUI.Open();
         }
 
-        private void EnterCoreGameplay(WeaponType weaponType)
+        private void EnterCoreGameplay(string weaponType)
         {
             var stateData = new CoreGameplayStateData(weaponType);
             _stateChanger.ChangeStateAsync<CoreGameplayState, CoreGameplayStateData>(stateData).Forget();

@@ -12,35 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81413a6bc684ef6954e949163fc1ab2, type: 3}
   m_Name: WeaponsConfig
   m_EditorClassIdentifier: 
-  <Weapons>k__BackingField:
-    _items:
-    - <Key>k__BackingField: 1
-      <Value>k__BackingField:
-        Prefab: {fileID: 7628269587689954788, guid: e664710f6dc450d40a6c48acf22ce52c,
-          type: 3}
-        DamageType: 0
-        Damage: 1
-        FireRate: 20
-        Cooldown: 0.05
-        ProjectileSpeed: 0
-        ProjectileLifetime: 0
-        MaxFireDistance: 500
-        MuzzleFlashPrefab: {fileID: 0}
-        ProjectilePrefab: {fileID: 0}
-        LaserPrefab: {fileID: 0}
-        FireSound: {fileID: 0}
-    - <Key>k__BackingField: 2
-      <Value>k__BackingField:
+  _weapons:
+  - rid: 7950112887296753931
+  - rid: 7950112887296753932
+  references:
+    version: 2
+    RefIds:
+    - rid: 7950112887296753931
+      type: {class: ProjectileWeaponPreset, ns: S1LV3Rman.RockFall.CoreGameplay, asm: S1LV3Rman.RockFall.Runtime}
+      data:
+        WeaponType: ProjectileWeapon
+        Stats:
+          DamageType: 1
+          Damage: 10
+          FireRate: 2
+          ProjectileSpeed: 100
+          ProjectileLifetime: 5
+          ProjectilePrefab: {fileID: 5674199642002621360, guid: 5fbef948127915c4f8cfcf6be1f1f876,
+            type: 3}
+          MuzzleFlashPrefab: {fileID: 0}
+          FireSound: {fileID: 0}
         Prefab: {fileID: 3519254570807320048, guid: 0bf8638252f955241ab6faf9d3b6069f,
           type: 3}
-        DamageType: 0
-        Damage: 10
-        FireRate: 2
-        Cooldown: 0.5
-        ProjectileSpeed: 100
-        ProjectileLifetime: 5
-        MaxFireDistance: 0
-        MuzzleFlashPrefab: {fileID: 0}
-        ProjectilePrefab: {fileID: 0}
-        LaserPrefab: {fileID: 0}
-        FireSound: {fileID: 0}
+    - rid: 7950112887296753932
+      type: {class: LaserWeaponPreset, ns: S1LV3Rman.RockFall.CoreGameplay, asm: S1LV3Rman.RockFall.Runtime}
+      data:
+        WeaponType: LaserWeapon
+        Stats:
+          DamageType: 2
+          Damage: 1
+          FireRate: 20
+          MaxFireDistance: 500
+          LaserPrefab: {fileID: 550431973576612599, guid: 10d3da044b472294881e4dd9617cc35a,
+            type: 3}
+          FireSound: {fileID: 0}
+        Prefab: {fileID: 7628269587689954788, guid: e664710f6dc450d40a6c48acf22ce52c,
+          type: 3}

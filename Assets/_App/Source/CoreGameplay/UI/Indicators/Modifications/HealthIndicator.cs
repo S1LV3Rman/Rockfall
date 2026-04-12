@@ -1,3 +1,5 @@
+using System;
+using R3;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,12 +9,17 @@ namespace S1LV3Rman.RockFall.CoreGameplay
     public class HealthIndicator : UIBehaviour, IIndicatorModification
     {
         [SerializeField] private Image _healthBar;
-        
-        private Health _health;
 
-        public void SetTarget(Health health)
+        private IDamageable _damageable;
+        private IDisposable _subscriptions;
+
+        public void SetTarget(IDamageable damageable)
         {
-            _health = health;
+            _damageable = damageable;
+
+            _subscriptions = Disposable.Combine(
+                damageable.CurrentHealth.Subscribe(UpdateCurrentHealth),
+                damageable.MaxHealth.Subscribe(UpdateMaxHealth));
         }
 
         public void SetColor(Color color)
@@ -25,29 +32,31 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public void AttachToIndicator(Indicator indicator)
         {
-            UpdateHealth();
+            UpdateHealth(_damageable.CurrentHealth.CurrentValue, _damageable.MaxHealth.CurrentValue);
         }
 
-        private void LateUpdate()
+        private void UpdateCurrentHealth(int currentHealth)
         {
-            if (!isActiveAndEnabled)
-                return;
-
-            if (_health == null)
-                return;
-            
-            UpdateHealth();
+            var maxHealth = _damageable.MaxHealth.CurrentValue;
+            UpdateHealth(currentHealth, maxHealth);
         }
 
-        private void UpdateHealth()
+        private void UpdateMaxHealth(int maxHealth)
         {
-            _healthBar.fillAmount = _health.MaxHealth > 0
-                ? (float) _health.CurrentHealth.CurrentValue / _health.MaxHealth
+            var currentHealth = _damageable.CurrentHealth.CurrentValue;
+            UpdateHealth(currentHealth, maxHealth);
+        }
+
+        private void UpdateHealth(int currentHealth, int maxHealth)
+        {
+            _healthBar.fillAmount = maxHealth > 0
+                ? (float) currentHealth / maxHealth
                 : 0f;
         }
 
         public void Remove()
         {
+            _subscriptions.Dispose();
             Destroy(gameObject);
         }
     }

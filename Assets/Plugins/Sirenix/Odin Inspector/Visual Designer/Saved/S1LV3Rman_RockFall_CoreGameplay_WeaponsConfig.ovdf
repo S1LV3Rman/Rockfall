@@ -1,0 +1,13 @@
+OVDF v1.1
+S1LV3Rman.RockFall.CoreGameplay.WeaponsConfig, S1LV3Rman.RockFall.Runtime
+MetaGuid:f81413a6bc684ef6954e949163fc1ab2
+
+# _weapons
++ [Sirenix.OdinInspector.ListDrawerSettingsAttribute]
+	HideAddButton = False
+	HideRemoveButton = False
+	ShowFoldout = False
+	draggable = False
+	draggableHasValue = True
+	defaultExpandedState = True
+	defaultExpandedStateHasValue = True

@@ -4,9 +4,9 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 {
     public struct CoreGameplayStateData : IStateData
     {
-        public readonly WeaponType WeaponType;
+        public readonly string WeaponType;
 
-        public CoreGameplayStateData(WeaponType weaponType) : this()
+        public CoreGameplayStateData(string weaponType) : this()
         {
             WeaponType = weaponType;
         }
