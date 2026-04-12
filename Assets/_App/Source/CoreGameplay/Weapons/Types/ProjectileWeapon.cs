@@ -21,6 +21,8 @@ namespace S1LV3Rman.RockFall.CoreGameplay
 
         public override IDamageSource Source { get; set; }
         public override int BaseDamage => _baseDamage;
+        public override float ProjectileSpeed => _projectileSpeed;
+        public override float MaxFireDistance => _projectileSpeed * _projectileLifetime;
         public override DamageType DamageType => _damageType;
 
         private readonly Subject<DamageContext> _onDealDamage = new();
