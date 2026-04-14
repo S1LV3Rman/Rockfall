@@ -574,27 +574,9 @@ namespace S1LV3Rman.RockFall
             ""id"": ""3c1fd8ac-fe53-48c5-88dc-0a31cb003174"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""EnginePower"",
                     ""type"": ""Value"",
                     ""id"": ""703cb460-73ec-415c-9c1e-ad5e47dcd0bb"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""RotateCamera"",
-                    ""type"": ""Value"",
-                    ""id"": ""ef9929ce-f5f9-4790-8b21-8fc7c8bca48a"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ZoomCamera"",
-                    ""type"": ""Value"",
-                    ""id"": ""30f84006-a468-46c3-9d58-fe0b33023d8d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -610,18 +592,18 @@ namespace S1LV3Rman.RockFall
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""LookAt"",
-                    ""type"": ""Value"",
-                    ""id"": ""8ceaefcc-2c6d-4bd5-8bbd-048894d5910f"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""ad362463-5ee2-4ac4-b5be-409bdb2d2b30"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""f36a7a60-0a16-4def-927a-2bcdab731146"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -630,70 +612,70 @@ namespace S1LV3Rman.RockFall
             ],
             ""bindings"": [
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""Keyboard"",
                     ""id"": ""80ebdf42-56eb-4753-a9fc-5d1def51e5cb"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""EnginePower"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Up"",
+                    ""name"": ""Positive"",
                     ""id"": ""9b9f2ba2-545b-43bc-b467-d7df9008c51d"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""EnginePower"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Down"",
+                    ""name"": ""Negative"",
                     ""id"": ""761d5eb9-3b56-470c-8a5b-1c7e989a86c8"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""EnginePower"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Left"",
-                    ""id"": ""0e28040f-1815-4fda-b020-6208e310bb9c"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""name"": ""Gamepad"",
+                    ""id"": ""c30100bf-54b8-46dc-a94a-5989f432380e"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Right"",
-                    ""id"": ""63ed1773-788f-4840-b58d-cb97e03d0109"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4ebecba7-190e-4176-82e6-76a265dd67d0"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
-                    ""groups"": "";AnyGamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
+                    ""groups"": """",
+                    ""action"": ""EnginePower"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""1f05f0b4-4408-44dd-8c22-40f459f58df7"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": "";AnyGamepad"",
+                    ""action"": ""EnginePower"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""24550e0c-18fa-49a7-b8c1-7dba39a11a46"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": "";AnyGamepad"",
+                    ""action"": ""EnginePower"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -707,37 +689,15 @@ namespace S1LV3Rman.RockFall
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""RMB+Position [Mouse]"",
-                    ""id"": ""6e029b56-1098-4ad3-aaf3-ec7d995a9098"",
-                    ""path"": ""OneModifier"",
+                    ""name"": """",
+                    ""id"": ""52f5292e-c85a-4c0e-ad0c-dd10624e524b"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LookAt"",
-                    ""isComposite"": true,
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""5d46a183-c30a-4df3-a05c-be2f294675c4"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""LookAt"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""8a0778fe-ce1c-4d7d-938a-05150112192f"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""LookAt"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -762,114 +722,26 @@ namespace S1LV3Rman.RockFall
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""HorizontalDelta [Mouse]"",
-                    ""id"": ""12ca6476-09c2-4424-aad0-a7955b2ced95"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""90939712-b726-4102-9309-6a28f10f687a"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""1d953f09-dcb4-4eb5-8ac7-c8018b63c3b7"",
-                    ""path"": ""<Mouse>/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": ""Scale(factor=0.2)"",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""RightStickHorizontal [Gamepad]"",
-                    ""id"": ""fa30e8d3-9806-4509-84a7-a569fdab33f8"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""6881e54b-50bf-4978-a9d0-e87519b4cbe5"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""name"": """",
+                    ""id"": ""40b66559-2f7c-4cb1-9eef-5d07ca9e1275"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";AnyGamepad"",
-                    ""action"": ""RotateCamera"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""093b5db3-f0c7-4a3d-bc78-9836df12e3b3"",
-                    ""path"": ""<Gamepad>/rightStick/x"",
-                    ""interactions"": """",
-                    ""processors"": ""AxisDeadzone"",
-                    ""groups"": "";AnyGamepad"",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""42473d84-3076-4d68-add2-34eaa9184708"",
-                    ""path"": ""<Mouse>/scroll/y"",
+                    ""id"": ""afcb23ed-c351-49f0-87cb-763bed7e3489"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=0.05)"",
+                    ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""ZoomCamera"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""RightStrickVertical [Gamepad]"",
-                    ""id"": ""243b58a6-12af-4ced-bb7b-662a931d8bd3"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ZoomCamera"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""b7f3199e-f1b1-41fc-a529-c2263dd32266"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";AnyGamepad"",
-                    ""action"": ""ZoomCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""d89074c7-b5b6-45f5-bd57-877b66fdbf4f"",
-                    ""path"": ""<Gamepad>/rightStick/y"",
-                    ""interactions"": """",
-                    ""processors"": ""AxisDeadzone,Scale(factor=0.01)"",
-                    ""groups"": "";AnyGamepad"",
-                    ""action"": ""ZoomCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1028,12 +900,10 @@ namespace S1LV3Rman.RockFall
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
             // Gameplay
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-            m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
-            m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
-            m_Gameplay_ZoomCamera = m_Gameplay.FindAction("ZoomCamera", throwIfNotFound: true);
+            m_Gameplay_EnginePower = m_Gameplay.FindAction("EnginePower", throwIfNotFound: true);
             m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
-            m_Gameplay_LookAt = m_Gameplay.FindAction("LookAt", throwIfNotFound: true);
             m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+            m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Resume = m_Menu.FindAction("Resume", throwIfNotFound: true);
@@ -1276,22 +1146,18 @@ namespace S1LV3Rman.RockFall
         // Gameplay
         private readonly InputActionMap m_Gameplay;
         private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-        private readonly InputAction m_Gameplay_Move;
-        private readonly InputAction m_Gameplay_RotateCamera;
-        private readonly InputAction m_Gameplay_ZoomCamera;
+        private readonly InputAction m_Gameplay_EnginePower;
         private readonly InputAction m_Gameplay_Look;
-        private readonly InputAction m_Gameplay_LookAt;
         private readonly InputAction m_Gameplay_Pause;
+        private readonly InputAction m_Gameplay_Fire;
         public struct GameplayActions
         {
             private @InputAsset m_Wrapper;
             public GameplayActions(@InputAsset wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Move => m_Wrapper.m_Gameplay_Move;
-            public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
-            public InputAction @ZoomCamera => m_Wrapper.m_Gameplay_ZoomCamera;
+            public InputAction @EnginePower => m_Wrapper.m_Gameplay_EnginePower;
             public InputAction @Look => m_Wrapper.m_Gameplay_Look;
-            public InputAction @LookAt => m_Wrapper.m_Gameplay_LookAt;
             public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+            public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1301,46 +1167,34 @@ namespace S1LV3Rman.RockFall
             {
                 if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @RotateCamera.started += instance.OnRotateCamera;
-                @RotateCamera.performed += instance.OnRotateCamera;
-                @RotateCamera.canceled += instance.OnRotateCamera;
-                @ZoomCamera.started += instance.OnZoomCamera;
-                @ZoomCamera.performed += instance.OnZoomCamera;
-                @ZoomCamera.canceled += instance.OnZoomCamera;
+                @EnginePower.started += instance.OnEnginePower;
+                @EnginePower.performed += instance.OnEnginePower;
+                @EnginePower.canceled += instance.OnEnginePower;
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @LookAt.started += instance.OnLookAt;
-                @LookAt.performed += instance.OnLookAt;
-                @LookAt.canceled += instance.OnLookAt;
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
             {
-                @Move.started -= instance.OnMove;
-                @Move.performed -= instance.OnMove;
-                @Move.canceled -= instance.OnMove;
-                @RotateCamera.started -= instance.OnRotateCamera;
-                @RotateCamera.performed -= instance.OnRotateCamera;
-                @RotateCamera.canceled -= instance.OnRotateCamera;
-                @ZoomCamera.started -= instance.OnZoomCamera;
-                @ZoomCamera.performed -= instance.OnZoomCamera;
-                @ZoomCamera.canceled -= instance.OnZoomCamera;
+                @EnginePower.started -= instance.OnEnginePower;
+                @EnginePower.performed -= instance.OnEnginePower;
+                @EnginePower.canceled -= instance.OnEnginePower;
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
-                @LookAt.started -= instance.OnLookAt;
-                @LookAt.performed -= instance.OnLookAt;
-                @LookAt.canceled -= instance.OnLookAt;
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @Fire.started -= instance.OnFire;
+                @Fire.performed -= instance.OnFire;
+                @Fire.canceled -= instance.OnFire;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -1503,12 +1357,10 @@ namespace S1LV3Rman.RockFall
         }
         public interface IGameplayActions
         {
-            void OnMove(InputAction.CallbackContext context);
-            void OnRotateCamera(InputAction.CallbackContext context);
-            void OnZoomCamera(InputAction.CallbackContext context);
+            void OnEnginePower(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
-            void OnLookAt(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnFire(InputAction.CallbackContext context);
         }
         public interface IMenuActions
         {
