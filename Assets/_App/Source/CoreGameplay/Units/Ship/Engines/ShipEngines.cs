@@ -1,116 +1,55 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    enum EngineMode { Hold, Acceleration, Deceleration }
-    public class ShipEngines : MonoBehaviour {
-    
-        // Стандартная скорость
-        public float maxSpeed = 25.0f;
-    
-        // Скорость разгона
-        public float acceleration = 0.5f;
-    
-        // Скорость торможения
-        public float deceleration = 0.5f;
-    
-        // Текущая скорость
-        public float currentSpeed = 0f;
+    public sealed class ShipEngines : MonoBehaviour
+    {
+        [SerializeField] private Rigidbody _rigidbody;
 
-        // Признак работы двигателей
-        private bool enginesOn = false;
+        [SerializeField] private float _maxForwardSpeed;
+        [SerializeField] private float _maxBackwardSpeed;
+        [SerializeField] private float _acceleration;
+        [SerializeField] private float _deceleration;
+        [SerializeField] private float _turnRate;
 
-        // Текущий режим работы двигателя
-        private EngineMode currentMode = EngineMode.Hold;
-    
-        // Перемещает корабль вперед с постоянной скоростью
-        void Update () 
+        [field: SerializeField] public bool IsOn { get; set; }
+        [field: SerializeField] private float TargetSpeed { get; set; }
+
+        public void ToggleEngines() => IsOn = !IsOn;
+
+        private void Update()
         {
-            var offset = Vector3.forward * (Time.deltaTime * currentSpeed);
-            this.transform.Translate(offset);
-        }
-    
-        // Вкл/выкл двигателя
-        public void ToggleEngines()
-        {
-            // Переключаем признак работы двигателей
-            enginesOn = !enginesOn;
-
-            // Запускаем нужный режим работы
-            if (enginesOn)
-            {
-                // Запустить сопрограмму ускорения
-                StartCoroutine(AcceleratingEngines());
-            }
-            else
-            {
-                // Запустить сопрограмму торможения
-                StartCoroutine(DeceleratingEngines());
-            }
+            if (IsOn)
+                UpdateVelocity();
         }
 
-        IEnumerator AcceleratingEngines()
+        private void UpdateVelocity()
         {
-            // Меняем режим работы двигателя на ускорение
-            currentMode = EngineMode.Acceleration;
-        
-            // Продолжать итерации, пока двигатели
-            // не разовьют максимальную скорость
-            while (currentMode == EngineMode.Acceleration &&
-                   currentSpeed < maxSpeed)
-            {
-                Accelerate();
+            var currentVelocity = _rigidbody.linearVelocity;
 
-                yield return new WaitForEndOfFrame();
-            }
+            var targetDirection = transform.forward;
+            var currentSpeed = currentVelocity.magnitude;
 
-            // Если режим двигателя не менялся
-            if (currentMode == EngineMode.Acceleration)
-            {
-                // Меняем режим работы двигателя на удержание
-                currentMode = EngineMode.Hold;
+            var newDirection = Vector3.RotateTowards(
+                currentVelocity.normalized,
+                targetDirection,
+                _turnRate * Time.deltaTime,
+                0f
+            );
 
-                // Корректируем скорость, чтобы не было погрешности
-                currentSpeed = maxSpeed;
-            }
-        }
+            var targetSpeed = TargetSpeed;
 
-        IEnumerator DeceleratingEngines()
-        {
-            // Меняем режим работы двигателя на торможение
-            currentMode = EngineMode.Deceleration;
-        
-            // Продолжать итерации, пока двигатели не остановятся
-            while (currentMode == EngineMode.Deceleration &&
-                   currentSpeed > 0f)
-            {
-                Decelerate();
+            var acceleration = currentSpeed < targetSpeed
+                ? _acceleration
+                : _deceleration;
 
-                yield return new WaitForEndOfFrame();
-            }
+            var newSpeed = Mathf.MoveTowards(
+                currentSpeed,
+                targetSpeed,
+                acceleration * Time.deltaTime
+            );
 
-            // Если режим двигателя не менялся
-            if (currentMode == EngineMode.Deceleration)
-            {
-                // Меняем режим работы двигателя на удержание
-                currentMode = EngineMode.Hold;
-
-                // Корректируем скорость, чтобы не было погрешности
-                currentSpeed = 0f;
-            }
-        }
-
-        public void Accelerate()
-        {
-            currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed + 1f,
-                acceleration * Time.deltaTime);
-        }
-
-        public void Decelerate()
-        {
-            currentSpeed = Mathf.Lerp(currentSpeed, -1f,
-                deceleration * Time.deltaTime);
+            _rigidbody.linearVelocity = newDirection * newSpeed;
         }
     }
 }

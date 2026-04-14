@@ -1,73 +1,72 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace S1LV3Rman.RockFall.CoreGameplay
 {
-    public class ShipSteering : MonoBehaviour {
-    
-        // Скорость поворота корабля
-        public float turnRate = 90.0f;
-    
-        // Сила выравнивания корабля
-        public float levelDamping = 1.0f;
-    
-        // Сила поворота корабля
-        float rotationDamping = 1.0f;
+    public sealed class ShipSteering : MonoBehaviour
+    {
+        [SerializeField] private float _turnRate = 75f;
+        [SerializeField] private float _stabilizationRate = 1f;
+        [SerializeField] private Transform _worldUpReference;
 
-        private void Start()
+        private Vector2 _steeringInput;
+
+        public void SetSteeringInput(Vector2 steeringInput)
         {
-            if (turnRate >= 90f)
-            {
-                rotationDamping = turnRate / 90f;
-            }
+            _steeringInput = Vector2.ClampMagnitude(steeringInput, 1f);
         }
 
-        void Update () 
+        public void StabilizeInstantly()
         {
-            // // Создать новый поворот, умножив вектор направления джойстика
-            // // на turnRate, и ограничить величиной 90 % от половины круга.
-            //
-            // // Сначала получить ввод пользователя.
-            // var steeringInput
-            //     = InputManager.Instance.steering.delta;
-            //
-            // // Теперь создать вектор для вычисления поворота.
-            // var rotation = new Vector2();
-            // rotation.y = steeringInput.x;
-            // rotation.x = -steeringInput.y;
-            //
-            // var maxRotation = rotation.normalized * turnRate / rotationDamping;
-            //
-            // // Умножить на turnRate, чтобы получить величину поворота.
-            // rotation *= turnRate / rotationDamping;
-            //
-            // if (rotation.magnitude > maxRotation.magnitude)
-            // {
-            //     rotation = maxRotation;
-            // }
-            //
-            // // И преобразовать радианы в кватернион поворота!
-            // var newRotation = transform.rotation * Quaternion.Euler(rotation);
-            //
-            // // Поворачиваем корабль в нужную сторону
-            // transform.rotation = Quaternion.Slerp(
-            //     transform.rotation, newRotation,
-            //     rotationDamping * Time.deltaTime);
-            //
-            // // Далее попытаться минимизировать поворот!
-            //
-            // // Сначала определить, какой была бы ориентация
-            // // в отсутствие вращения относительно оси Z
-            // var levelAngles = transform.eulerAngles;
-            // levelAngles.z = 0.0f;
-            // var levelOrientation = Quaternion.Euler(levelAngles);
-            //
-            // // Объединить текущую ориентацию с небольшой величиной
-            // // этой ориентации "без вращения"; когда это происходит
-            // // на протяжении нескольких кадров, объект медленно
-            // // выравнивается над поверхностью
-            // transform.rotation = Quaternion.Slerp(
-            //     transform.rotation, levelOrientation,
-            //     levelDamping * Time.deltaTime);
+            transform.rotation = GetStabilizedRotation(transform.rotation, GetWorldUp());
+        }
+
+        private void OnDisable()
+        {
+            _steeringInput = Vector2.zero;
+        }
+
+        private void Update()
+        {
+            var deltaTime = Time.deltaTime;
+            var worldUp = GetWorldUp();
+
+            if (_steeringInput.sqrMagnitude > 0f)
+                ApplySteering(deltaTime);
+
+            ApplyStabilization(worldUp, deltaTime);
+        }
+
+        private void ApplySteering(float deltaTime)
+        {
+            var steeringStep = new Vector3(-_steeringInput.y, _steeringInput.x, 0f) * (_turnRate * deltaTime);
+            transform.rotation *= Quaternion.Euler(steeringStep);
+        }
+
+        private void ApplyStabilization(Vector3 worldUp, float deltaTime)
+        {
+            var stabilizedRotation = GetStabilizedRotation(transform.rotation, worldUp);
+            var interpolation = 1f - Mathf.Exp(-_stabilizationRate * deltaTime);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, stabilizedRotation, interpolation);
+        }
+
+        private Quaternion GetStabilizedRotation(Quaternion currentRotation, Vector3 worldUp)
+        {
+            if (worldUp.sqrMagnitude <= Mathf.Epsilon)
+                return currentRotation;
+
+            return Quaternion.FromToRotation(currentRotation * Vector3.up, worldUp) * currentRotation;
+        }
+
+        private Vector3 GetWorldUp()
+        {
+            if (_worldUpReference != null)
+                return _worldUpReference.up;
+
+            if (transform.parent != null)
+                return transform.parent.up;
+
+            return Vector3.up;
         }
     }
 }

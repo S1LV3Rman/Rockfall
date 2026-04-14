@@ -55,6 +55,7 @@
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Casteroids/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Cship/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Cship_005Ccomponents/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Cship_005Cengines/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Cship_005Cweaponary/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=assets_005C_005Fapp_005Csource_005Ccoregameplay_005Cunits_005Cstation/@EntryIndexedValue">True</s:Boolean>

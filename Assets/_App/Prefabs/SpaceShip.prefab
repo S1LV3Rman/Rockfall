@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Engines: {fileID: 1042808301737215753}
+  Steering: {fileID: 1042808301737215799}
   Weaponry: {fileID: 4280204049121311847}
 --- !u!114 &4280204049121311847
 MonoBehaviour:
@@ -137,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46611af911190a141a8176c762dbd136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnRate: 75
-  levelDamping: 1
+  _turnRate: 75
+  _stabilizationRate: 1
+  _worldUpReference: {fileID: 0}
 --- !u!82 &4539016523396975881
 AudioSource:
   m_ObjectHideFlags: 0
